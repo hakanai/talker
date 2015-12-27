@@ -81,6 +81,7 @@ class TalkerPresenter {
                         dateString);
                 if (!dayDivider.equals(lastDayDivider)) {
                     view.appendMarkup(dayDivider);
+                    lastDayDivider = dayDivider;
                 }
 
                 String messageLine = String.format(
