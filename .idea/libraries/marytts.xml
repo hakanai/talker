@@ -1,0 +1,13 @@
+<component name="libraryTable">
+  <library name="marytts">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/lib/icu4j-54.1.1.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/marytts-client-5.1.2-jar-with-dependencies.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/marytts-lang-en-5.1.2.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/marytts-runtime-5.1.2-jar-with-dependencies.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/voice-cmu-slt-hsmm-5.1.2.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>
