@@ -24,7 +24,7 @@ import java.util.regex.Pattern;
  * Reads the UStream social stream.
  */
 public class UStreamMessageStream extends AbstractMessageStream {
-    private static final Pattern cleanTextRegex = Pattern.compile("^(.*)\\s*\\(.* live at http://ustre.am/[0-9a-zA-Z]+\\)$");
+    private static final Pattern cleanTextRegex = Pattern.compile("^(.*)\\s*\\(.*live at http://ustre.am/[0-9a-zA-Z]+\\)$");
 
     private final String preferenceSubKey;
     private final String baseUrl;
