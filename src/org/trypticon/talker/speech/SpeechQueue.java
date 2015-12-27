@@ -1,5 +1,6 @@
 package org.trypticon.talker.speech;
 
+import java.util.Properties;
 import java.util.Queue;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
@@ -11,8 +12,8 @@ public class SpeechQueue {
     private final Queue<String> textQueue = new ConcurrentLinkedQueue<>();
     private volatile Thread thread;
 
-    public SpeechQueue() {
-        speaker = new SpeakerFactory().create();
+    public SpeechQueue(Properties config) {
+        speaker = new SpeakerFactory().create(config);
     }
 
     public void post(String text) {

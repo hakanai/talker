@@ -2,27 +2,21 @@ package org.trypticon.talker.messages;
 
 import org.trypticon.talker.messages.ustream.UStreamMessageStream;
 
-import java.io.BufferedInputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.nio.file.Files;
-import java.nio.file.Paths;
 import java.util.Properties;
 
 /**
  * Responsible for creating a message stream.
  */
 public class MessageStreamFactory {
-    public MessageStream create() {
-        Properties properties = new Properties();
-        try (InputStream stream = new BufferedInputStream(Files.newInputStream(Paths.get("config.properties")))) {
-            properties.load(stream);
-        } catch (IOException e) {
-            throw new IllegalStateException("Couldn't load config.properties", e);
+    public MessageStream create(Properties config) {
+        String providerName = config.getProperty("messages");
+        switch (providerName) {
+            case "ustream": {
+                int channelId = Integer.parseInt(config.getProperty("messages.channelId"));
+                return new UStreamMessageStream(channelId);
+            }
+            default:
+                throw new IllegalArgumentException("Unknown voice provider: " + providerName);
         }
-
-        int channelId = Integer.parseInt(properties.getProperty("messages.source.channelId"));
-
-        return new UStreamMessageStream(channelId);
     }
 }

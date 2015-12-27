@@ -4,18 +4,25 @@ import org.trypticon.talker.messages.*;
 import org.trypticon.talker.speech.SpeechQueue;
 
 import javax.swing.*;
+import java.io.BufferedInputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.format.FormatStyle;
 import java.util.Locale;
+import java.util.Properties;
 import java.util.prefs.Preferences;
 
 /**
  * Coordinates messages, the display and the speech queue.
  */
 class TalkerPresenter {
-    private final SpeechQueue speechQueue = new SpeechQueue();
+    private final Properties config;
+    private final SpeechQueue speechQueue;
     private final TalkerView view;
     private MessageStream stream;
     private final MessageStreamListener messageStreamListener = new MessageStreamHandler();
@@ -25,6 +32,15 @@ class TalkerPresenter {
 
     TalkerPresenter(TalkerView view) {
         this.view = view;
+
+        config = new Properties();
+        try (InputStream stream = new BufferedInputStream(Files.newInputStream(Paths.get("config.properties")))) {
+            config.load(stream);
+        } catch (IOException e) {
+            throw new IllegalStateException("Couldn't load config.properties", e);
+        }
+
+        speechQueue = new SpeechQueue(config);
     }
 
     public void start() {
@@ -48,7 +64,7 @@ class TalkerPresenter {
     private void refreshStream() {
         stopStream();
 
-        MessageStream stream = new MessageStreamFactory().create();
+        MessageStream stream = new MessageStreamFactory().create(config);
         stream.addMessageStreamListener(messageStreamListener);
         preferences = Preferences.userRoot().node("org/trypticon/talker/messages/" + stream.getPreferenceSubKey());
 
