@@ -19,6 +19,27 @@ public abstract class AbstractMessageStream implements MessageStream {
         listeners.remove(listener);
     }
 
+    protected final void fireRefreshStarted() {
+        MessageStreamEvent event = new MessageStreamEvent(this);
+        for (MessageStreamListener listener : listeners) {
+            listener.refreshStarted(event);
+        }
+    }
+
+    protected final void fireRefreshFinished() {
+        MessageStreamEvent event = new MessageStreamEvent(this);
+        for (MessageStreamListener listener : listeners) {
+            listener.refreshFinished(event);
+        }
+    }
+
+    protected final void fireRefreshFailed() {
+        MessageStreamEvent event = new MessageStreamEvent(this);
+        for (MessageStreamListener listener : listeners) {
+            listener.refreshFailed(event);
+        }
+    }
+
     protected final void fireMessageReceived(Message message) {
         MessageStreamEvent event = new MessageStreamEvent(this, message);
         for (MessageStreamListener listener : listeners) {

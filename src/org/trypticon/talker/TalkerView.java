@@ -5,5 +5,7 @@ package org.trypticon.talker;
  */
 public interface TalkerView {
 
-    void appendText(String text);
+    void appendMarkup(String markup);
+
+    void updateStatus(String message);
 }

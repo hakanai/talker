@@ -8,6 +8,10 @@ import java.util.EventObject;
 public class MessageStreamEvent extends EventObject {
     private final Message message;
 
+    public MessageStreamEvent(MessageStream stream) {
+        this(stream, null);
+    }
+
     public MessageStreamEvent(MessageStream stream, Message message) {
         super(stream);
         this.message = message;

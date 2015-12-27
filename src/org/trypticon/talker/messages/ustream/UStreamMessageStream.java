@@ -64,6 +64,8 @@ public class UStreamMessageStream extends AbstractMessageStream {
     }
 
     private void fetchNewMessages() {
+        fireRefreshStarted();
+
         URL url;
         try {
             if (nextRangeStart == 0) {
@@ -87,6 +89,7 @@ public class UStreamMessageStream extends AbstractMessageStream {
 
                 Instant timestamp = Instant.ofEpochSecond(itemObject.get("createdAt").getAsLong());
                 String speaker = itemObject.get("displayName").getAsString().trim();
+                URL speakerIcon = new URL(itemObject.get("profilePictureUrl").getAsString().trim());
                 String text = itemObject.get("text").getAsString().trim();
 
                 // Chop repetitive junk off the end. Somehow ustream itself doesn't show this stuff.
@@ -95,7 +98,7 @@ public class UStreamMessageStream extends AbstractMessageStream {
                     text = matcher.group(1);
                 }
 
-                fireMessageReceived(new Message(timestamp, speaker, text));
+                fireMessageReceived(new Message(timestamp, speaker, speakerIcon, text));
             }
 
             JsonArray range = response.get("range").getAsJsonArray();
@@ -118,9 +121,12 @@ public class UStreamMessageStream extends AbstractMessageStream {
 //            System.out.println("Will make next request at: " + new Date(nextRequestTime));
             timer.schedule(fetchNewMessagesTask(), new Date(nextRequestTime));
 
+            fireRefreshFinished();
         } catch (IOException e) {
-            //TODO: Handle it somehow
             e.printStackTrace();
+
+            //TODO: Indicate the type of error somehow...
+            fireRefreshFailed();
         }
     }
 
