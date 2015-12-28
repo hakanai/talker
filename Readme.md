@@ -25,12 +25,18 @@ Roadmap
 
 * Come up with a real name for the tool.
 * Move configuration properly into the GUI.
-* Add support for more message backends.
-* Add support for more speech backends. Obvious candidates would be VOICEROID and SAPI.
-* Find a way to drive VOCALOID directly from Java. It should be possible to call a VST using JVstHost,
-  but I found that library not to work and help does not appear to be forthcoming. Once we can drive it
-  directly from Java, we can implement more correct timing of syllables and possibly even pitch
-  variation, because the NLP libraries I'm working with already carry some of that data.
+* Add support for more message backends. Candidates:
+    * Twitter
+    * Niconico
+    * IRC
+* Add support for more speech backends. Candidates:
+    * VOICEROID (drive the GUI? Or use an existing tool that drives the GUI?)
+* Remove reliance on Robokoe. It should be possible to call a VST using JVstHost,
+  but I found that library not to work and help does not appear to be forthcoming.
+  Benefits if it can be made to work:
+    * Better timing of syllables
+    * Possibly even pitch variation
+    * Support on Mac OS X (yes, VOCALOID runs on Macs now.)
 
 Building
 --------
@@ -96,9 +102,33 @@ Install procedure:
       miku_speak.exe テスト
 
     You should get some sound. As long as this tool works, you're good to go.
-* If you want, you can run setup.exe, but it isn't required for this usage. If you do run setup.exe, here's what you do:
+* (Optional) Set up SAPI provider.
+    * This isn't required to use miku_speak.exe directly, but sets up a SAPI provider so that you can use
+      the alternative provider documented below.
+    * Run setup.exe from the install directory.
     * Hit 追加 (Add). Adjust defaults if you want, hit OK.
     * Hit 終了 (Done)
-    * After doing this, you might try to run SimpleTTS.js and get an error. This is normal. If you run it with the 32-bit Windows Scripting Host, then it should work fine. Other speech tools like Bouyomi-chan should also work fine since they are presumably ancient 32-bit tools as well.
+    * After doing this, you might try to run SimpleTTS.js and get an error. This is normal.
+      The developer didn't bother to install it into the 64-bit registry or even provide a 64-bit version.
+      If you run it with the 32-bit Windows Scripting Host, then it should work fine.
+      Other speech tools like Bouyomi-chan should also work fine since they are ancient 32-bit tools as well.
 
+**SAPI speech provider (Windows only)**
+
+  "speaker": {
+    "provider": "sapi",
+    "voice": "Miku",
+    "rate": 4, // -10 ~ +10
+    "force32Bit": true
+  },
+
+Windows ships with some speech providers out of the box so you should be able to use these.
+The voice name here is matched against the exact name that is displayed for the voice in Windows.
+
+The example here shows "Miku" being used as the voice, which will use Robokoe if you have followed
+the additional instructions listed under the Robokoe section above.
+
+The "force32Bit" option forces use of the WOW64 (32-bit "Windows on Windows64") version of the
+Windows Script Host when running scripts. This gets around the issue of certain speech providers
+not providing 64-bit versions.
 
