@@ -6,9 +6,13 @@
     "channelId": 39393939
   },
 
+  //"speaker": {
+  //  "provider": "mac",
+  //  "voice": "Kyoko"
+  //},
   "speaker": {
-    "provider": "mac",
-    "voice": "Kyoko"
+    "provider": "robokoe",
+    "executable": "C:\\Program Files (x86)\\miku_speak\\miku_speak.exe"
   },
 
   "substitutions": [

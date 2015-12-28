@@ -53,7 +53,7 @@ public class KatakanaReadingSubstituter implements Substituter {
 
         for (Token token : text) {
             TokenType currentTokenType = token.getType();
-            if (currentTokenType != lastTokenType) {
+            if (lastTokenType != null && currentTokenType != lastTokenType) {
                 flush(currentRun, results);
             }
             lastTokenType = currentTokenType;
@@ -72,8 +72,9 @@ public class KatakanaReadingSubstituter implements Substituter {
      * @param results the results.
      */
     private void flush(List<Token> currentRun, List<Text> results) {
-        if (currentRun.isEmpty()) {
+        if (!currentRun.isEmpty()) {
             results.add(new Text(currentRun));
+            currentRun.clear();
         }
     }
 }
