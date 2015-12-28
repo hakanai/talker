@@ -1,4 +1,4 @@
-package talker.text;
+package talker.text.substitution;
 
 import java.util.*;
 

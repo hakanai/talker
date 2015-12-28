@@ -1,4 +1,4 @@
-package talker.text.substituter;
+package talker.text.substitution;
 
 import talker.text.Text;
 

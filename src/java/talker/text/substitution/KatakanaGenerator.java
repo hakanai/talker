@@ -1,6 +1,9 @@
-package talker.text;
+package talker.text.substitution;
 
 import com.ibm.icu.text.Transliterator;
+import talker.text.Text;
+import talker.text.Token;
+import talker.text.TokenType;
 
 import java.util.Collections;
 import java.util.HashMap;

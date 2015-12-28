@@ -2,8 +2,8 @@ package talker.speech;
 
 import talker.config.Configuration;
 import talker.text.Text;
-import talker.text.substituter.Substituter;
-import talker.text.substituter.SubstituterFactory;
+import talker.text.substitution.Substituter;
+import talker.text.substitution.SubstituterFactory;
 import talker.text.tokenisation.KuromojiTokeniser;
 
 import java.util.Queue;
