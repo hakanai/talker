@@ -99,7 +99,7 @@ Install procedure:
     * **TODO:** In theory this should leave things non-working because the mecab data is now in a place where the library can't find it. However, in practice, this setup appears to work. I'm not sure why. If you happen to know why, let me know!
 * Open a Command Prompt, navigate to the directory containing miku_speak.exe and type something like:
 
-      miku_speak.exe テスト
+        miku_speak.exe テスト
 
     You should get some sound. As long as this tool works, you're good to go.
 * (Optional) Set up SAPI provider.
@@ -115,12 +115,12 @@ Install procedure:
 
 **SAPI speech provider (Windows only)**
 
-  "speaker": {
-    "provider": "sapi",
-    "voice": "Miku",
-    "rate": 4, // -10 ~ +10
-    "force32Bit": true
-  },
+    "speaker": {
+      "provider": "sapi",
+      "voice": "Miku",
+      "rate": 4, // -10 ~ +10
+      "force32Bit": true
+    },
 
 Windows ships with some speech providers out of the box so you should be able to use these.
 The voice name here is matched against the exact name that is displayed for the voice in Windows.
