@@ -7,12 +7,14 @@ import talker.text.TokenType;
 
 import java.util.LinkedList;
 import java.util.List;
+import java.util.regex.Pattern;
 
 /**
  * Tokeniser backed by Kuromoji.
  */
 public class KuromojiTokeniser {
     private final Tokenizer tokeniser;
+    private final Pattern wordPattern = Pattern.compile("\\w", Pattern.UNICODE_CHARACTER_CLASS);
 
     public KuromojiTokeniser() {
         Tokenizer.Builder tokeniserBuilder = Tokenizer.builder();
@@ -38,26 +40,33 @@ public class KuromojiTokeniser {
     }
 
     private Token convertToken(org.atilika.kuromoji.Token token) {
-        String pos = token.getAllFeaturesArray()[1];
+        String[] features = token.getAllFeaturesArray();
+        String pos = features[1];
+        String text = token.getSurfaceForm();
         TokenType tokenType;
         switch (pos) {
             case "アルファベット":
+                // Workaround for these tokens having readings in the dictionary
+                // which we might want to substitute.
                 tokenType = TokenType.OTHER;
                 break;
-            case "サ変接続":
+            case "句点":
                 tokenType = TokenType.PUNCTUATION;
                 break;
             case "空白":
                 tokenType = TokenType.WHITESPACE;
                 break;
             default:
-                if (token.getAllFeaturesArray().length > 7) {
+                if (!wordPattern.matcher(text).find()) {
+                    // Workaround for things like "." coming back as "noun".
+                    tokenType = TokenType.PUNCTUATION;
+                } else if (token.getAllFeaturesArray().length > 7) {
                     tokenType = TokenType.JAPANESE;
                 } else {
                     tokenType = TokenType.OTHER;
                 }
         }
 
-        return new Token(token.getSurfaceForm(), tokenType);
+        return new Token(text, tokenType);
     }
 }
