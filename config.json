@@ -1,0 +1,31 @@
+{
+  "repeatAlreadySpokenOnStartup": true,
+
+  "messages": {
+    "provider": "ustream",
+    "channelId": 6978894
+  },
+
+  "speaker": {
+    "provider": "mac",
+    "voice": "Kyoko"
+  },
+
+  "substitutions": [
+    {
+      "provider": "regex",
+      "inputType": "OTHER",
+      "regex": "[wｗ]",
+      "replacement": "わら",
+      "outputType": "JAPANESE"
+    },
+    {
+      "provider": "regex",
+      "inputType": "OTHER",
+      "regex": "[wｗ]{2,}",
+      "replacement": "わらわら",
+      "outputType": "JAPANESE"
+    }
+  ]
+
+}

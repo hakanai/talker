@@ -1,18 +1,18 @@
 package org.trypticon.talker.messages;
 
+import org.trypticon.talker.config.Configuration;
 import org.trypticon.talker.messages.ustream.UStreamMessageStream;
-
-import java.util.Properties;
 
 /**
  * Responsible for creating a message stream.
  */
 public class MessageStreamFactory {
-    public MessageStream create(Properties config) {
-        String providerName = config.getProperty("messages");
+    public MessageStream create(Configuration configuration) {
+        Configuration messagesConfiguration = configuration.getSubSection("messages");
+        String providerName = messagesConfiguration.getString("provider");
         switch (providerName) {
             case "ustream": {
-                int channelId = Integer.parseInt(config.getProperty("messages.channelId"));
+                int channelId = messagesConfiguration.getInt("channelId");
                 return new UStreamMessageStream(channelId);
             }
             default:

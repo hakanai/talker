@@ -1,5 +1,7 @@
 package org.trypticon.talker.speech;
 
+import org.trypticon.talker.text.Text;
+
 /**
  * Interface to abstract something which can speak text.
  */
@@ -10,5 +12,5 @@ public interface Speaker {
      *
      * @param text the text.
      */
-    void speak(String text);
+    void speak(Text text);
 }

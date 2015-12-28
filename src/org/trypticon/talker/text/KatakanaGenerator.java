@@ -1,12 +1,16 @@
-package org.trypticon.talker.speech.robokoe.text;
+package org.trypticon.talker.text;
 
 import com.ibm.icu.text.Transliterator;
 
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+/**
+ * Generates katakana readings for input text.
+ */
 class KatakanaGenerator {
 
     private final Map<String, PhonemeMapEntry> phonemeMap = new HashMap<>();
@@ -110,6 +114,12 @@ class KatakanaGenerator {
         transliterator = Transliterator.getInstance("Latin-Katakana");
     }
 
+    /**
+     * Converts English text to Romaji.
+     *
+     * @param english the English.
+     * @return the Romaji.
+     */
     private String englishToRomaji(String english) {
         StringBuilder result = new StringBuilder();
 
@@ -150,6 +160,12 @@ class KatakanaGenerator {
         return result.toString();
     }
 
+    /**
+     * Manipulates the end of the string to follow rules for what can be converted into Katakana.
+     *
+     * @param builder the text being built up.
+     * @param nextText the next text we're about to append.
+     */
     private void padVowel(StringBuilder builder, String nextText) {
         char firstOfNext = nextText.isEmpty() ? '\0' : nextText.charAt(0);
         switch (builder.charAt(builder.length() - 1)) {
@@ -173,13 +189,29 @@ class KatakanaGenerator {
         }
     }
 
-    String englishToKatakana(String english) {
-        String romaji = englishToRomaji(english);
-        return transliterator.transliterate(romaji);
+    /**
+     * Converts English text to Katakana readings.
+     *
+     * @param english the English text.
+     * @return the Katakana reading of the text.
+     */
+    Text englishToKatakana(Text english) {
+        String romaji = englishToRomaji(english.getContent());
+        return new Text(Collections.singletonList(new Token(
+                transliterator.transliterate(romaji),
+                TokenType.JAPANESE)));
     }
 
-    String punctuationToJapanese(String punctuation) {
-        return transliterator.transliterate(punctuation);
+    /**
+     * Converts English punctuation to the Japanese equivalent.
+     *
+     * @param punctuation the English punctuation.
+     * @return the Japanese equivalent punctuation.
+     */
+    Text punctuationToJapanese(Text punctuation) {
+        return new Text(Collections.singletonList(new Token(
+                transliterator.transliterate(punctuation.getContent()),
+                TokenType.PUNCTUATION)));
     }
 
     private static class PhonemeMapEntry {

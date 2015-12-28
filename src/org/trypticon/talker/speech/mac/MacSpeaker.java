@@ -1,6 +1,7 @@
 package org.trypticon.talker.speech.mac;
 
 import org.trypticon.talker.speech.Speaker;
+import org.trypticon.talker.text.Text;
 
 import java.io.IOException;
 
@@ -15,9 +16,9 @@ public class MacSpeaker implements Speaker {
     }
 
     @Override
-    public void speak(String text) {
+    public void speak(Text text) {
         try {
-            Process process = new ProcessBuilder("say", "-v", voice, text)
+            Process process = new ProcessBuilder("say", "-v", voice, text.getContent())
                     .start();
             process.waitFor();
         } catch (IOException e) {

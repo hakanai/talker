@@ -1,18 +1,18 @@
 package org.trypticon.talker.speech;
 
+import org.trypticon.talker.config.Configuration;
 import org.trypticon.talker.speech.mac.MacSpeaker;
-
-import java.util.Properties;
 
 /**
  * Responsible for creating a speaker.
  */
 public class SpeakerFactory {
-    public Speaker create(Properties config) {
-        String providerName = config.getProperty("messages");
+    public Speaker create(Configuration configuration) {
+        Configuration speakerConfiguration = configuration.getSubSection("speaker");
+        String providerName = speakerConfiguration.getString("provider");
         switch (providerName) {
             case "mac": {
-                String voice = config.getProperty("speaker.voice");
+                String voice = speakerConfiguration.getString("voice");
                 return new MacSpeaker(voice);
             }
             default:

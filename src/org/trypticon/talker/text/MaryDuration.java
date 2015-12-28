@@ -1,4 +1,4 @@
-package org.trypticon.talker.speech.robokoe.text;
+package org.trypticon.talker.text;
 
 import java.util.*;
 

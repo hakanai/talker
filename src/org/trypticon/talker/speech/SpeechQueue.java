@@ -1,6 +1,11 @@
 package org.trypticon.talker.speech;
 
-import java.util.Properties;
+import org.trypticon.talker.config.Configuration;
+import org.trypticon.talker.text.Text;
+import org.trypticon.talker.text.substituter.Substituter;
+import org.trypticon.talker.text.substituter.SubstituterFactory;
+import org.trypticon.talker.text.tokenisation.KuromojiTokeniser;
+
 import java.util.Queue;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
@@ -8,12 +13,16 @@ import java.util.concurrent.ConcurrentLinkedQueue;
  * Queue to put text on to get it spoken.
  */
 public class SpeechQueue {
+    private final KuromojiTokeniser tokeniser;
+    private final Substituter substituter;
     private final Speaker speaker;
     private final Queue<String> textQueue = new ConcurrentLinkedQueue<>();
     private volatile Thread thread;
 
-    public SpeechQueue(Properties config) {
-        speaker = new SpeakerFactory().create(config);
+    public SpeechQueue(Configuration configuration) {
+        tokeniser = new KuromojiTokeniser();
+        substituter = new SubstituterFactory().create(configuration);
+        speaker = new SpeakerFactory().create(configuration);
     }
 
     public void post(String text) {
@@ -44,7 +53,9 @@ public class SpeechQueue {
             while (thread != null) {
                 String text;
                 while ((text = textQueue.poll()) != null) {
-                    speaker.speak(text);
+                    Text tokenisedText = tokeniser.tokenise(text);
+                    tokenisedText = substituter.substitute(tokenisedText);
+                    speaker.speak(tokenisedText);
                 }
 
                 synchronized (textQueue) {
