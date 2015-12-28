@@ -1,6 +1,7 @@
 package talker.speech.mac;
 
 import talker.speech.Speaker;
+import talker.speech.util.ProcessUtils;
 import talker.text.Text;
 
 import java.io.IOException;
@@ -17,15 +18,6 @@ public class MacSpeaker implements Speaker {
 
     @Override
     public void speak(Text text) {
-        try {
-            Process process = new ProcessBuilder("say", "-v", voice, text.getContent())
-                    .start();
-            process.waitFor();
-        } catch (IOException e) {
-            throw new IllegalStateException("Couldn't launch speech program, perhaps you're not on OSX somehow?", e);
-        } catch (InterruptedException e) {
-            // No problem.
-            Thread.currentThread().interrupt();
-        }
+        ProcessUtils.execAndWait("say", "-v", voice, text.getContent());
     }
 }

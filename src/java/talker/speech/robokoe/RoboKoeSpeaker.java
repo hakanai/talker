@@ -1,6 +1,7 @@
 package talker.speech.robokoe;
 
 import talker.speech.Speaker;
+import talker.speech.util.ProcessUtils;
 import talker.text.Text;
 import talker.text.substitution.KatakanaReadingSubstituter;
 
@@ -23,16 +24,8 @@ public class RoboKoeSpeaker implements Speaker {
         // This app can't read non-Japanese characters at all, so we substitute.
         text = readingSubstituter.substitute(text);
 
-        try {
-            Process process = new ProcessBuilder(executable, text.getContent())
-                    .start();
-            process.waitFor();
-        } catch (IOException e) {
-            throw new IllegalStateException("Couldn't launch speech program, perhaps you're not on OSX somehow?", e);
-        } catch (InterruptedException e) {
-            // No problem.
-            Thread.currentThread().interrupt();
-        }
+        //TODO: This process exits before it has finished. :(
+        ProcessUtils.execAndWait(executable, text.getContent());
 
     }
 }

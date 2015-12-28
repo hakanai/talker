@@ -24,6 +24,7 @@ class TalkerPresenter {
     private MessageStream stream;
     private final MessageStreamListener messageStreamListener = new MessageStreamHandler();
 
+    private final boolean repeatAlreadySpokenOnStartup;
     private long lastSpokenMessage;
     private Preferences preferences;
     private String lastDayDivider;
@@ -37,10 +38,8 @@ class TalkerPresenter {
             throw new IllegalStateException("Couldn't load config.json", e);
         }
 
-        boolean repeatAlreadySpokenOnStartup = configuration.getBoolean("repeatAlreadySpokenOnStartup");
+        repeatAlreadySpokenOnStartup = configuration.getBoolean("repeatAlreadySpokenOnStartup");
         speechQueue = new SpeechQueue(configuration);
-
-        lastSpokenMessage = repeatAlreadySpokenOnStartup ? 0 : preferences.getLong("lastSpokenMessage", 0);
     }
 
     public void start() {
@@ -67,6 +66,7 @@ class TalkerPresenter {
         MessageStream stream = new MessageStreamFactory().create(configuration);
         stream.addMessageStreamListener(messageStreamListener);
         preferences = Preferences.userRoot().node("talker/messages/" + stream.getPreferenceSubKey());
+        lastSpokenMessage = repeatAlreadySpokenOnStartup ? 0 : preferences.getLong("lastSpokenMessage", 0);
 
         this.stream = stream;
         stream.start();

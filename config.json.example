@@ -10,9 +10,17 @@
   //  "provider": "mac",
   //  "voice": "Kyoko"
   //},
+
+  //"speaker": {
+  //  "provider": "robokoe",
+  //  "executable": "C:\\Program Files (x86)\\miku_speak\\miku_speak.exe"
+  //},
+
   "speaker": {
-    "provider": "robokoe",
-    "executable": "C:\\Program Files (x86)\\miku_speak\\miku_speak.exe"
+    "provider": "sapi",
+    "voice": "Miku",
+    "rate": 4, // -10 ~ +10
+    "force32Bit": true
   },
 
   "substitutions": [
