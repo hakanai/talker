@@ -51,6 +51,9 @@ public class KuromojiTokeniser {
                 tokenType = TokenType.OTHER;
                 break;
             case "句点":
+            case "読点":
+            case "括弧開":
+            case "括弧閉":
                 tokenType = TokenType.PUNCTUATION;
                 break;
             case "空白":
