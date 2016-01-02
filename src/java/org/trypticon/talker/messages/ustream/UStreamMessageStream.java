@@ -128,6 +128,17 @@ public class UStreamMessageStream extends AbstractMessageStream {
 
             //TODO: Indicate the type of error somehow...
             fireRefreshFailed();
+
+            //TODO: Some kind of exponential back-off?
+            long now = System.currentTimeMillis();
+            int retry = 10;
+
+            if (nextRangeStart > 0) {
+                nextRefreshInterval = (int) (now/1000 + retry - nextRangeStart);
+            }
+
+            long nextRequestTime = now + retry*1000;
+            timer.schedule(fetchNewMessagesTask(), new Date(nextRequestTime));
         }
     }
 
