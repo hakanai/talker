@@ -86,7 +86,7 @@ There isn't anything particularly special you have to do to get this to work, ot
 Install procedure:
 
 * Install Miku:
-    * I used VOCALOID2. The tool appears to support V3 as well, but my licence was already activated on another computer.
+    * I used VOCALOID2. The tool appears to support V1 as well, but I don't have it to test.
     * Activate the licence.
     * Start it up and check that it works.
 * Install 初音ミクのロボ声:
