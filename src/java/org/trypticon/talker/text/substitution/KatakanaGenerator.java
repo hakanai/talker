@@ -187,6 +187,12 @@ class KatakanaGenerator {
                     builder.append('o');
                 }
                 break;
+            case 'd':
+                // Special case mirroring the one we had for t
+                if (firstOfNext != 'z') {
+                    builder.append('o');
+                }
+                break;
             default:
                 builder.append('u'); //TODO: There are probably other cases I'm forgetting...
         }

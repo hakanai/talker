@@ -44,6 +44,11 @@ public class KatatanaReadingSubstituterTest {
         assertThat(substitute("aquaria"), is(equalTo("アクウエリイア")));
     }
 
+    @Test
+    public void testEnglish_AdjoiningConsonants() {
+        assertThat(substitute("standby"), is(equalTo("スタンドバイ")));
+    }
+
     private String substitute(String input) {
         return new KatakanaReadingSubstituter().substitute(new Text(Collections.singletonList(
                 new Token(input, TokenType.OTHER)))).getContent();
