@@ -151,7 +151,7 @@ class KatakanaGenerator {
             }
 
             // Prevent multiple consonants landing in a row.
-            if (entry.type == Type.CONSONANT && last != null && last.type == Type.CONSONANT) {
+            if (last != null && last.type == Type.CONSONANT) {
                 padVowel(result, entry.romaji);
             }
 
@@ -171,19 +171,21 @@ class KatakanaGenerator {
      */
     private void padVowel(StringBuilder builder, String nextText) {
         char firstOfNext = nextText.isEmpty() ? '\0' : nextText.charAt(0);
+        boolean nextIsConsonant = isConsonant(firstOfNext);
         switch (builder.charAt(builder.length() - 1)) {
             case 'm':
                 // Special case to convert mb/mp/mm into nb/np/mm
                 if (firstOfNext == 'b' || firstOfNext == 'p' || firstOfNext == 'm') {
                     builder.setCharAt(builder.length() - 1, 'n');
-                } else {
+                } else if (nextIsConsonant) {
                     builder.append('u');
                 }
+                break;
             case 'n':
                 break;
             case 't':
                 // Special case to let through ts as-is. TODO: Probably still not perfect. :(
-                if (firstOfNext != 's') {
+                if (firstOfNext != 's' && nextIsConsonant) {
                     builder.append('o');
                 }
                 break;
@@ -193,8 +195,31 @@ class KatakanaGenerator {
                     builder.append('o');
                 }
                 break;
+            case 's':
+                // 'si' -> 'shi', otherwise you get 'sexi' which gets read out as just 'se'.
+                if (firstOfNext == 'i') {
+                    builder.append('h');
+                } else if (nextIsConsonant) {
+                    builder.append('u');
+                }
+                break;
             default:
-                builder.append('u'); //TODO: There are probably other cases I'm forgetting...
+                if (nextIsConsonant) {
+                    builder.append('u'); //TODO: There are probably other cases I'm forgetting...
+                }
+        }
+    }
+
+    private boolean isConsonant(char ch) {
+        switch (ch) {
+            case 'a':
+            case 'e':
+            case 'i':
+            case 'o':
+            case 'u':
+                return false;
+            default:
+                return true;
         }
     }
 

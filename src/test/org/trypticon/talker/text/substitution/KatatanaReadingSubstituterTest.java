@@ -41,12 +41,17 @@ public class KatatanaReadingSubstituterTest {
 
     @Test
     public void testEnglish_Schwas() {
-        assertThat(substitute("aquaria"), is(equalTo("アクウエリイア")));
+        assertThat(substitute("aquaria"), is(equalTo("アクエリイア")));
     }
 
     @Test
     public void testEnglish_AdjoiningConsonants() {
         assertThat(substitute("standby"), is(equalTo("スタンドバイ")));
+    }
+
+    @Test
+    public void testEnglish_Si() {
+        assertThat(substitute("consistently"), is(equalTo("カンシスタントリイ")));
     }
 
     private String substitute(String input) {
