@@ -1,6 +1,7 @@
 package org.trypticon.talker.messages.ustream;
 
 import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import org.trypticon.talker.messages.AbstractMessageStream;
@@ -88,18 +89,43 @@ public class UStreamMessageStream extends AbstractMessageStream {
             for (int i = size - 1; i >= 0; i--) { // Processing in time order
                 JsonObject itemObject = payload.get(i).getAsJsonObject();
 
-                Instant timestamp = Instant.ofEpochSecond(itemObject.get("createdAt").getAsLong());
-                String speaker = itemObject.get("displayName").getAsString().trim();
-                URL speakerIcon = new URL(itemObject.get("profilePictureUrl").getAsString().trim());
-                String text = itemObject.get("text").getAsString().trim();
+                JsonElement typeElement = itemObject.get("type");
+                if (typeElement != null) {
+                    // Special message.
+                    switch (typeElement.getAsString()) {
+                        case "host":
+                            // "host", "host":(new url)
+                            break;
 
-                // Chop repetitive junk off the end. Somehow ustream itself doesn't show this stuff.
-                Matcher matcher = cleanTextRegex.matcher(text);
-                if (matcher.matches()) {
-                    text = matcher.group(1);
+                        case "ignMsg":
+                            // Ignore a previous message. In our case, it's too late, we already spoke it.
+                            // "ignMsg", "uid":(message id)
+                            break;
+
+                        case "ignUser":
+                            // "ignUser", "network":(user info)
+                            break;
+
+                        case "unIgnUser":
+                            // "unIgnUser", "network":(user info)
+                            break;
+                    }
+                } else {
+                    // Normal message
+                    Instant timestamp = Instant.ofEpochSecond(itemObject.get("createdAt").getAsLong());
+                    System.out.println(itemObject);
+                    String speaker = itemObject.get("displayName").getAsString().trim();
+                    URL speakerIcon = new URL(itemObject.get("profilePictureUrl").getAsString().trim());
+                    String text = itemObject.get("text").getAsString().trim();
+
+                    // Chop repetitive junk off the end. Somehow ustream itself doesn't show this stuff.
+                    Matcher matcher = cleanTextRegex.matcher(text);
+                    if (matcher.matches()) {
+                        text = matcher.group(1);
+                    }
+
+                    fireMessageReceived(new Message(timestamp, speaker, speakerIcon, text));
                 }
-
-                fireMessageReceived(new Message(timestamp, speaker, speakerIcon, text));
             }
 
             JsonArray range = response.get("range").getAsJsonArray();
