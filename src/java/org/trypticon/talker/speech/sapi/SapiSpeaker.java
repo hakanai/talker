@@ -3,6 +3,7 @@ package org.trypticon.talker.speech.sapi;
 import org.trypticon.talker.speech.Speaker;
 import org.trypticon.talker.speech.util.ProcessUtils;
 import org.trypticon.talker.text.Text;
+import org.trypticon.talker.text.substitution.KatakanaReadingSubstituter;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -17,6 +18,8 @@ public class SapiSpeaker implements Speaker {
     private final String voice;
     private final int rate;
 
+    private final KatakanaReadingSubstituter readingSubstituter = new KatakanaReadingSubstituter();
+
     public SapiSpeaker(String voice, int rate, boolean force32Bit) {
         if (force32Bit) {
             executable = System.getenv("WINDIR") + "/SysWOW64/cscript.exe";
@@ -30,6 +33,9 @@ public class SapiSpeaker implements Speaker {
 
     @Override
     public void speak(Text text) {
+
+        text = readingSubstituter.substitute(text);
+
         Path tempFile = null;
         try {
             tempFile = Files.createTempFile("speak", ".js");
