@@ -40,6 +40,8 @@ class MaryDuration {
                 // fields[1] always contains 125 and apparently means nothing anymore.
                 // http://www.dfki.de/pipermail/mary-users/2013-April/001312.html
 
+                //TODO: If it's _ then we can't interpret it
+
                 results.add(new MaryDuration(
                         Float.parseFloat(fields[0]),
                         fields[2]));

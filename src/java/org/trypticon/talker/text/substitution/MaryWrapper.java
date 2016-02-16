@@ -33,7 +33,7 @@ class MaryWrapper {
         try {
             return MaryDuration.fromLines(mary.generateText(text));
         } catch (SynthesisException e) {
-            throw new RuntimeException(e);
+            throw new RuntimeException("Error synthesising reading for text: " + text, e);
         }
     }
 }
