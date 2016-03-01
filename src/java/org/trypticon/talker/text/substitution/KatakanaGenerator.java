@@ -23,8 +23,7 @@ class KatakanaGenerator {
         // @ - (a)ren(a)
         phonemeMap.put("@", new PhonemeMapEntry(Type.VOWEL, "a"));
         // r= - w(or)ld
-        //TODO: I still have this in vowels because that's how it was classified, and it works, but feels wrong.
-        phonemeMap.put("r=", new PhonemeMapEntry(Type.VOWEL, "r"));
+        phonemeMap.put("r=", new PhonemeMapEntry(Type.VOWEL, "aa"));
         // A - f(a)ther
         phonemeMap.put("A", new PhonemeMapEntry(Type.VOWEL, "aa"));
         // { - tr(a)p
@@ -103,7 +102,7 @@ class KatakanaGenerator {
         // r - (r)ed
         phonemeMap.put("r", new PhonemeMapEntry(Type.CONSONANT, "r"));
         // w - (w)est
-        phonemeMap.put("w", new PhonemeMapEntry(Type.CONSONANT, "u"));
+        phonemeMap.put("w", new PhonemeMapEntry(Type.CONSONANT, "w"));
         // j - (y)es
         phonemeMap.put("j", new PhonemeMapEntry(Type.CONSONANT, "i"));
     }
