@@ -231,8 +231,13 @@ class KatakanaGenerator {
     Text englishToKatakana(Text english) {
         String romaji = englishToRomaji(english.getContent());
         return new Text(Collections.singletonList(new Token(
-                transliterator.transliterate(romaji),
+                romajiToKatakana(romaji),
                 TokenType.JAPANESE)));
+    }
+
+    private String romajiToKatakana(String romaji) {
+        return transliterator.transliterate(romaji)
+                .replace("テゥ", "トゥ");
     }
 
     /**

@@ -57,6 +57,12 @@ public class KatatanaReadingSubstituterTest {
     }
 
     @Test
+    public void testEnglish_To() {
+        // toxu would be better, but requires vowel length work
+        assertThat(substitute("to"), is(equalTo("トゥウ")));
+    }
+
+    @Test
     public void testEnglish_Blur() {
         assertThat(substitute("blur"), is(equalTo("ブラア")));
     }
