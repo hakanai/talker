@@ -239,7 +239,8 @@ class KatakanaGenerator {
         return transliterator.transliterate(romaji)
                 .replace("ヱ", "ウェ")
                 .replace("ヰ", "ウィ")
-                .replace("テゥ", "トゥ");
+                .replace("テゥ", "トゥ")
+                .replace("ゼィ", "ジ");
     }
 
     /**

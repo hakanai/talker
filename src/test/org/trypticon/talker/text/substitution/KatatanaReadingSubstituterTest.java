@@ -1,6 +1,8 @@
 package org.trypticon.talker.text.substitution;
 
 import org.junit.Test;
+import org.trypticon.talker.speech.robokoe.RoboKoeSpeaker;
+import org.trypticon.talker.speech.sapi.SapiSpeaker;
 import org.trypticon.talker.text.Text;
 import org.trypticon.talker.text.Token;
 import org.trypticon.talker.text.TokenType;
@@ -60,6 +62,11 @@ public class KatatanaReadingSubstituterTest {
     public void testEnglish_To() {
         // toxu would be better, but requires vowel length work
         assertThat(substitute("to"), is(equalTo("トゥウ")));
+    }
+
+    @Test
+    public void testEnglish_This() {
+        assertThat(substitute("this"), is(equalTo("ジス")));
     }
 
     @Test
