@@ -43,7 +43,7 @@ public class KatatanaReadingSubstituterTest {
     public void testEnglish_Schwas() {
         // akueriia would be fine too.
         // akueria would be better but depends on the dictionary having it.
-        assertThat(substitute("aquaria"), is(equalTo("アクヱリイア")));
+        assertThat(substitute("aquaria"), is(equalTo("アクウェリイア")));
     }
 
     @Test
@@ -70,6 +70,11 @@ public class KatatanaReadingSubstituterTest {
     @Test
     public void testEnglish_World() {
         assertThat(substitute("world"), is(equalTo("ワアルド")));
+    }
+
+    @Test
+    public void testEnglish_Waves() {
+        assertThat(substitute("waves"), is(equalTo("ウェイヴズ")));
     }
 
     private String substitute(String input) {

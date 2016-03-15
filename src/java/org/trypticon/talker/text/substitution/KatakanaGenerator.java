@@ -237,6 +237,8 @@ class KatakanaGenerator {
 
     private String romajiToKatakana(String romaji) {
         return transliterator.transliterate(romaji)
+                .replace("ヱ", "ウェ")
+                .replace("ヰ", "ウィ")
                 .replace("テゥ", "トゥ");
     }
 
