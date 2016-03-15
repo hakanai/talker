@@ -65,6 +65,12 @@ public class KatatanaReadingSubstituterTest {
     }
 
     @Test
+    public void testEnglish_Do() {
+        // doxu would be better, but requires vowel length work
+        assertThat(substitute("do"), is(equalTo("ドゥウ")));
+    }
+
+    @Test
     public void testEnglish_This() {
         assertThat(substitute("this"), is(equalTo("ジス")));
     }
@@ -90,8 +96,9 @@ public class KatatanaReadingSubstituterTest {
     }
 
     private String substitute(String input) {
-        return new KatakanaReadingSubstituter().substitute(new Text(Collections.singletonList(
-                new Token(input, TokenType.OTHER)))).getContent();
-
+        Text inputText = new Text(Collections.singletonList(
+                new Token(input, TokenType.OTHER)));
+        Text outputText = new KatakanaReadingSubstituter().substitute(inputText);
+        return outputText.getContent();
     }
 }

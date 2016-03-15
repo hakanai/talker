@@ -240,6 +240,7 @@ class KatakanaGenerator {
                 .replace("ヱ", "ウェ")
                 .replace("ヰ", "ウィ")
                 .replace("テゥ", "トゥ")
+                .replace("デゥ", "ドゥ")
                 .replace("ゼィ", "ジ");
     }
 
