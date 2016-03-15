@@ -25,7 +25,7 @@ class KatakanaGenerator {
         // r= - w(or)ld
         phonemeMap.put("r=", new PhonemeMapEntry(Type.VOWEL, "aa"));
         // A - f(a)ther
-        phonemeMap.put("A", new PhonemeMapEntry(Type.VOWEL, "aa"));
+        phonemeMap.put("A", new PhonemeMapEntry(Type.VOWEL, "a"));
         // { - tr(a)p
         //TODO: sometimes it's "ya", e.g. c(a)t -> k(ya)tto
         phonemeMap.put("{", new PhonemeMapEntry(Type.VOWEL, "a"));
@@ -190,7 +190,7 @@ class KatakanaGenerator {
                 break;
             case 'd':
                 // Special case mirroring the one we had for t
-                if (firstOfNext != 'z') {
+                if (firstOfNext != 'z' && nextIsConsonant) {
                     builder.append('o');
                 }
                 break;

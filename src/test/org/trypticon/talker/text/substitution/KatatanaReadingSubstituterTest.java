@@ -77,6 +77,11 @@ public class KatatanaReadingSubstituterTest {
         assertThat(substitute("waves"), is(equalTo("ウェイヴズ")));
     }
 
+    @Test
+    public void testEnglish_Nobody() {
+        assertThat(substitute("nobody"), is(equalTo("ノウバディイ")));
+    }
+
     private String substitute(String input) {
         return new KatakanaReadingSubstituter().substitute(new Text(Collections.singletonList(
                 new Token(input, TokenType.OTHER)))).getContent();
