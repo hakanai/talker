@@ -3,6 +3,8 @@ package org.trypticon.talker;
 import javax.swing.*;
 import javax.swing.text.*;
 import javax.swing.text.html.HTMLDocument;
+import javax.swing.text.html.HTMLEditorKit;
+import javax.swing.text.html.StyleSheet;
 import java.awt.*;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
@@ -19,13 +21,10 @@ public class TalkerFrame extends JFrame implements TalkerView {
     public TalkerFrame() {
         super("Talker");
 
-        editorPane = new JTextPane();
-        editorPane.setEditable(false);
-        editorPane.setContentType("text/html");
-        appendMarkupOnly("<div id=\"bottom\">&nbsp;</div>");
+        editorPane = new CustomTextPane();
 
         statusLabel = new JLabel(" ");
-        statusLabel.putClientProperty( "JComponent.sizeVariant", "mini" );
+        statusLabel.putClientProperty("JComponent.sizeVariant", "mini");
 
         JPanel bottomPanel = new JPanel();
         bottomPanel.setLayout(new FlowLayout(FlowLayout.TRAILING));
@@ -35,7 +34,7 @@ public class TalkerFrame extends JFrame implements TalkerView {
         add(new JScrollPane(editorPane), BorderLayout.CENTER);
         add(bottomPanel, BorderLayout.PAGE_END);
 
-        setSize(500, 350);
+        pack();
         setDefaultCloseOperation(DISPOSE_ON_CLOSE);
         setVisible(true);
 
@@ -51,23 +50,41 @@ public class TalkerFrame extends JFrame implements TalkerView {
 
     @Override
     public void appendMarkup(String markup) {
-        appendMarkupOnly(markup);
-        editorPane.scrollToReference("bottom");
-    }
-
-    private void appendMarkupOnly(String markup) {
         HTMLDocument document = (HTMLDocument) editorPane.getDocument();
-        Element root = document.getDefaultRootElement();
-        Element bottom = root.getElement(root.getElementCount() - 1);
+        Element bottom = document.getElement("bottom");
         try {
             document.insertBeforeStart(bottom, markup);
         } catch (BadLocationException | IOException e) {
             throw new IllegalStateException("BadLocationException for a location given to us", e);
         }
+
+        editorPane.scrollToReference("bottom");
     }
 
     @Override
     public void updateStatus(String message) {
         statusLabel.setText(message);
+    }
+
+    private static class CustomTextPane extends JTextPane {
+        private CustomTextPane() {
+            setEditable(false);
+            setContentType("text/html");
+            putClientProperty(JEditorPane.HONOR_DISPLAY_PROPERTIES, Boolean.TRUE);
+            updateUI();
+            setText("<html>\n" +
+                    "<body>\n" +
+                    "<div id=\"bottom\">&nbsp;</div>\n" +
+                    "</body>\n" +
+                    "</html>");
+        }
+
+        @Override
+        public Dimension getPreferredScrollableViewportSize() {
+            FontMetrics metrics = getFontMetrics(getFont());
+            return new Dimension(
+                    metrics.charWidth('m') * 50,
+                    metrics.getHeight() * 20);
+        }
     }
 }
