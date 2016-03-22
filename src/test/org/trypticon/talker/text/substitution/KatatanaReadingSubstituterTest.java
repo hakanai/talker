@@ -95,10 +95,34 @@ public class KatatanaReadingSubstituterTest {
         assertThat(substitute("nobody"), is(equalTo("ノウバディイ")));
     }
 
+    @Test
+    public void testEnglish_Voice() {
+        assertThat(substitute("voice"), is(equalTo("ヴォイス")));
+    }
+
+    @Test
+    public void testEnglish_Evade() {
+        assertThat(substitute("evade"), is(equalTo("イヴェイド")));
+    }
+
+    @Test
+    public void testEnglish_Voodoo() {
+        assertThat(substitute("voodoo"), is(equalTo("ヴウドゥウ")));
+    }
+
+    //todo difficult problem, marytts has weird pronunciation
+//    @Test
+//    public void testEnglish_America() {
+//        assertThat(substitute("America"), is(equalTo("")));
+//    }
+
     private String substitute(String input) {
         Text inputText = new Text(Collections.singletonList(
                 new Token(input, TokenType.OTHER)));
         Text outputText = new KatakanaReadingSubstituter().substitute(inputText);
+
+        new SapiSpeaker("Miku", 4, false).speak(outputText);
+
         return outputText.getContent();
     }
 }
