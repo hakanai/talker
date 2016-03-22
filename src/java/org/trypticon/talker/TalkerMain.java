@@ -9,6 +9,12 @@ public class TalkerMain implements Runnable {
 
     @Override
     public void run() {
+        try {
+            UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+        } catch (Exception e) {
+            // no problem, use the default
+        }
+
         new TalkerFrame();
     }
 
