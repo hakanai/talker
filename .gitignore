@@ -1,4 +1,6 @@
+/.gradle/
+/.idea/
+/build/
 /config.json
-/log
-/out
-/.idea/workspace.xml
+/log/
+/out/

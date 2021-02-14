@@ -29,6 +29,9 @@ Roadmap
     * Twitter
     * Niconico
     * IRC
+    * YouTube
+    * Twitch
+    * Discord
 * Add support for more speech backends. Candidates:
     * VOICEROID (drive the GUI? Or use an existing tool that drives the GUI?)
 * Remove reliance on Robokoe. It should be possible to call a VST using JVstHost,
@@ -122,7 +125,7 @@ Install procedure:
       "force32Bit": true
     },
 
-Windows ships with some speech providers out of the box so you should be able to use these.
+Windows ships with some speech providers out of the box, so you should be able to use these.
 The voice name here is matched against the exact name that is displayed for the voice in Windows.
 
 The example here shows "Miku" being used as the voice, which will use Robokoe if you have followed
