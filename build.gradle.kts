@@ -18,6 +18,10 @@ tasks.withType<JavaCompile> {
     options.encoding = "UTF-8"
 }
 
+application {
+    mainClass.set("org.trypticon.talker.TalkerMain")
+}
+
 dependencies {
     val icu4jVersion = "68.2"
     implementation("com.ibm.icu:icu4j:${icu4jVersion}")
