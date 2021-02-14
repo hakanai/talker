@@ -30,7 +30,6 @@ public class UStreamMessageStream extends AbstractMessageStream {
     private final String preferenceSubKey;
     private final String baseUrl;
     private Timer timer;
-    private final JsonParser jsonParser = new JsonParser();
 
     private int nextRefreshInterval;
     private long nextRangeStart;
@@ -82,7 +81,7 @@ public class UStreamMessageStream extends AbstractMessageStream {
         try (InputStream stream = url.openStream();
              Reader reader = new InputStreamReader(stream, StandardCharsets.UTF_8)) {
 
-            JsonObject response = jsonParser.parse(reader).getAsJsonObject();
+            JsonObject response = JsonParser.parseReader(reader).getAsJsonObject();
 
             JsonArray payload = response.get("payload").getAsJsonArray();
             int size = payload.size();

@@ -31,9 +31,8 @@ public class Configuration {
      */
     public static Configuration readFromFile(Path file) throws IOException {
         JsonObject configObject;
-        JsonParser jsonParser = new JsonParser();
         try (BufferedReader reader = Files.newBufferedReader(file)) {
-            configObject = jsonParser.parse(reader).getAsJsonObject();
+            configObject = JsonParser.parseReader(reader).getAsJsonObject();
         }
         return new Configuration(configObject);
     }
