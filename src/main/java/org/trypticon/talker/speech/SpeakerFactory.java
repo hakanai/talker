@@ -13,20 +13,12 @@ public class SpeakerFactory {
         Configuration speakerConfiguration = configuration.getSubSection("speaker");
         String providerName = speakerConfiguration.getString("provider");
         switch (providerName) {
-            case "mac": {
-                String voice = speakerConfiguration.getString("voice");
-                return new MacSpeaker(voice);
-            }
-            case "robokoe": {
-                String executable = speakerConfiguration.getString("executable");
-                return new RoboKoeSpeaker(executable);
-            }
-            case "sapi": {
-                String voice = speakerConfiguration.getString("voice");
-                int rate = speakerConfiguration.getInt("rate");
-                boolean force32Bit = speakerConfiguration.getBoolean("force32Bit");
-                return new SapiSpeaker(voice, rate, force32Bit);
-            }
+            case "mac":
+                return new MacSpeaker(speakerConfiguration);
+            case "robokoe":
+                return new RoboKoeSpeaker(speakerConfiguration);
+            case "sapi":
+                return new SapiSpeaker(speakerConfiguration);
             default:
                 throw new IllegalArgumentException("Unknown voice provider: " + providerName);
         }

@@ -20,6 +20,14 @@ public class TalkerFrame extends JFrame implements TalkerView {
     public TalkerFrame() {
         super("Talker");
 
+        Desktop desktop = Desktop.getDesktop();
+
+        JMenuBar menuBar = buildMenuBar(this);
+        setJMenuBar(menuBar);
+        if (desktop != null && desktop.isSupported(Desktop.Action.APP_MENU_BAR)) {
+            desktop.setDefaultMenuBar(menuBar);
+        }
+
         editorPane = new CustomTextPane();
 
         statusLabel = new JLabel(" ");
@@ -45,6 +53,24 @@ public class TalkerFrame extends JFrame implements TalkerView {
                 presenter.stop();
             }
         });
+    }
+
+    private static JMenuBar buildMenuBar(TalkerFrame mainFrame) {
+        JMenuBar menuBar = new JMenuBar();
+        Desktop desktop = Desktop.getDesktop();
+
+        // TODO: This is very skeleton and users expect a lot more to be in the menu.
+        JMenu fileMenu = new JMenu("File");
+
+        fileMenu.add(new OpenSettingsAction(mainFrame));
+
+        // Give people on OSes with no proper exit behaviour an action to do the job.
+        if (!desktop.isSupported(Desktop.Action.APP_QUIT_HANDLER)) {
+            fileMenu.add(new ExitAction(mainFrame));
+        }
+
+        menuBar.add(fileMenu);
+        return menuBar;
     }
 
     @Override
@@ -82,8 +108,8 @@ public class TalkerFrame extends JFrame implements TalkerView {
         public Dimension getPreferredScrollableViewportSize() {
             FontMetrics metrics = getFontMetrics(getFont());
             return new Dimension(
-                    metrics.charWidth('m') * 50,
-                    metrics.getHeight() * 20);
+                    metrics.charWidth('m') * 80,
+                    metrics.getHeight() * 40);
         }
     }
 }

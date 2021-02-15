@@ -1,5 +1,6 @@
 package org.trypticon.talker.speech.robokoe;
 
+import org.trypticon.talker.config.Configuration;
 import org.trypticon.talker.speech.Speaker;
 import org.trypticon.talker.speech.util.ProcessUtils;
 import org.trypticon.talker.text.Text;
@@ -15,6 +16,10 @@ public class RoboKoeSpeaker implements Speaker {
     public RoboKoeSpeaker(String executable) {
         this.executable = executable;
     }
+
+    public RoboKoeSpeaker(Configuration configuration) {
+        this(configuration.getString("executable"));
+   }
 
     @Override
     public void speak(Text text) {

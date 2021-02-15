@@ -1,12 +1,5 @@
 package org.trypticon.talker.messages.ustream;
 
-import com.google.gson.JsonArray;
-import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
-import com.google.gson.JsonParser;
-import org.trypticon.talker.messages.AbstractMessageStream;
-import org.trypticon.talker.messages.Message;
-
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -20,6 +13,14 @@ import java.util.Timer;
 import java.util.TimerTask;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+
+import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
+import org.trypticon.talker.config.Configuration;
+import org.trypticon.talker.messages.AbstractMessageStream;
+import org.trypticon.talker.messages.Message;
 
 /**
  * Reads the UStream social stream.
@@ -37,6 +38,10 @@ public class UStreamMessageStream extends AbstractMessageStream {
     public UStreamMessageStream(int channelId) {
         preferenceSubKey = "ustream/" + channelId;
         baseUrl = "http://socialstream.ustream.tv/socialstream/get.json/" + channelId;
+    }
+
+    public UStreamMessageStream(Configuration configuration) {
+        this(configuration.getInt("channelId"));
     }
 
     @Override

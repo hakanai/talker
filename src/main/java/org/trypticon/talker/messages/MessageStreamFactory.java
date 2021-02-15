@@ -11,10 +11,8 @@ public class MessageStreamFactory {
         Configuration messagesConfiguration = configuration.getSubSection("messages");
         String providerName = messagesConfiguration.getString("provider");
         switch (providerName) {
-            case "ustream": {
-                int channelId = messagesConfiguration.getInt("channelId");
-                return new UStreamMessageStream(channelId);
-            }
+            case "ustream":
+                return new UStreamMessageStream(messagesConfiguration);
             default:
                 throw new IllegalArgumentException("Unknown voice provider: " + providerName);
         }

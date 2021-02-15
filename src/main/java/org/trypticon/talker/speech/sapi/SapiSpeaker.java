@@ -1,14 +1,15 @@
 package org.trypticon.talker.speech.sapi;
 
-import org.trypticon.talker.speech.Speaker;
-import org.trypticon.talker.speech.util.ProcessUtils;
-import org.trypticon.talker.text.Text;
-import org.trypticon.talker.text.substitution.KatakanaReadingSubstituter;
-
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Collections;
+
+import org.trypticon.talker.config.Configuration;
+import org.trypticon.talker.speech.Speaker;
+import org.trypticon.talker.speech.util.ProcessUtils;
+import org.trypticon.talker.text.Text;
+import org.trypticon.talker.text.substitution.KatakanaReadingSubstituter;
 
 /**
  * Speaker using Microsoft's Speech API (SAPI).
@@ -29,6 +30,12 @@ public class SapiSpeaker implements Speaker {
 
         this.voice = voice;
         this.rate = rate;
+    }
+
+    public SapiSpeaker(Configuration configuration) {
+        this(configuration.getString("voice"),
+                configuration.getInt("rate"),
+                configuration.getBoolean("force32Bit"));
     }
 
     @Override

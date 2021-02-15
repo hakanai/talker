@@ -12,7 +12,7 @@ public class TalkerMain implements Runnable {
         try {
             UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
         } catch (Exception e) {
-            // no problem, use the default
+            // no problem, use the default which has already been set
         }
 
         new TalkerFrame();
