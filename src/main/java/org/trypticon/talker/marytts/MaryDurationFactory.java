@@ -1,35 +1,27 @@
-package org.trypticon.talker.text.substitution;
+package org.trypticon.talker.marytts;
 
-import marytts.LocalMaryInterface;
+import java.util.List;
+
 import marytts.MaryInterface;
 import marytts.exceptions.MaryConfigurationException;
 import marytts.exceptions.SynthesisException;
 
-import java.util.List;
-import java.util.Locale;
-
 /**
- * Convenience wrapper around MaryTTS.
+ * Convenience wrapper around MaryTTS to produce sequences of phoneme durations.
  */
-class MaryWrapper {
+public class MaryDurationFactory {
     private final MaryInterface mary;
 
-    MaryWrapper() {
+    public MaryDurationFactory() {
         try {
-            mary = new LocalMaryInterface();
-
-            // You get an NPE if you don't set a voice when setting a locale.
-            mary.setLocale(new Locale("en", "GB"));
-            mary.setVoice(mary.getAvailableVoices().iterator().next());
-
+            mary = MaryUtils.createMary();
             mary.setOutputType("REALISED_DURATIONS");
-
         } catch (MaryConfigurationException e) {
             throw new RuntimeException(e);
         }
     }
 
-    List<MaryDuration> generate(String text) {
+    public List<MaryDuration> generateReading(String text) {
         try {
             return MaryDuration.fromLines(mary.generateText(text));
         } catch (SynthesisException e) {

@@ -1,11 +1,11 @@
-package org.trypticon.talker.text.substitution;
+package org.trypticon.talker.marytts;
 
 import java.util.*;
 
 /**
  * Holds a phoneme with its duration.
  */
-class MaryDuration {
+public class MaryDuration {
     private final float duration;
     private final String phoneme;
 
@@ -18,7 +18,7 @@ class MaryDuration {
         return duration;
     }
 
-    String getPhoneme() {
+    public String getPhoneme() {
         return phoneme;
     }
 

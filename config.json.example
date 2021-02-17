@@ -16,11 +16,16 @@
   //  "executable": "C:\\Program Files (x86)\\miku_speak\\miku_speak.exe"
   //},
 
+  //"speaker": {
+  //  "provider": "sapi",
+  //  "voice": "Miku",
+  //  "rate": 4, // -10 ~ +10
+  //  "force32Bit": true
+  //},
+
   "speaker": {
-    "provider": "sapi",
-    "voice": "Miku",
-    "rate": 4, // -10 ~ +10
-    "force32Bit": true
+    "provider": "marytts",
+    "voice": "cmu-slt-hsmm"
   },
 
   "substitutions": [

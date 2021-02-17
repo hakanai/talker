@@ -36,11 +36,21 @@ dependencies {
     val kuromojiVersion = "0.7.7"
     implementation("org.atilika.kuromoji:kuromoji:${kuromojiVersion}")
 
+    val twitch4jVersion = "1.2.0"
+    implementation("com.github.twitch4j:twitch4j:${twitch4jVersion}")
+
+    val sphinx4Version = "1.0.0"
+    implementation("de.sciss:sphinx4-core:${sphinx4Version}")
+    runtimeOnly("de.sciss:sphinx4-data:${sphinx4Version}")
+
     val maryttsVersion = "5.2"
     implementation("de.dfki.mary:marytts-runtime:${maryttsVersion}")
     implementation("de.dfki.mary:marytts-client:${maryttsVersion}")
-    implementation("de.dfki.mary:marytts-lang-en:${maryttsVersion}")
-    implementation("de.dfki.mary:voice-cmu-slt-hsmm:${maryttsVersion}")
+    runtimeOnly("de.dfki.mary:marytts-lang-en:${maryttsVersion}")
+    runtimeOnly("de.dfki.mary:voice-cmu-slt-hsmm:${maryttsVersion}")
+
+    val jgoodiesVersion = "1.9.0"
+    implementation("com.jgoodies:jgoodies-forms:${jgoodiesVersion}")
 
     val junitVersion = "5.7.1"
     testImplementation("org.junit.jupiter:junit-jupiter-api:${junitVersion}")

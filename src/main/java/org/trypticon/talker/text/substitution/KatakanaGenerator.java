@@ -1,15 +1,17 @@
 package org.trypticon.talker.text.substitution;
 
-import com.ibm.icu.text.Transliterator;
-import org.trypticon.talker.text.Text;
-import org.trypticon.talker.text.Token;
-import org.trypticon.talker.text.TokenType;
-
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+
+import com.ibm.icu.text.Transliterator;
+import org.trypticon.talker.marytts.MaryDuration;
+import org.trypticon.talker.marytts.MaryDurationFactory;
+import org.trypticon.talker.text.Text;
+import org.trypticon.talker.text.Token;
+import org.trypticon.talker.text.TokenType;
 
 /**
  * Generates katakana readings for input text.
@@ -107,11 +109,11 @@ class KatakanaGenerator {
         phonemeMap.put("j", new PhonemeMapEntry(Type.CONSONANT, "i"));
     }
 
-    private final MaryWrapper mary;
+    private final MaryDurationFactory mary;
     private final Transliterator transliterator;
 
     KatakanaGenerator() {
-        mary = new MaryWrapper();
+        mary = new MaryDurationFactory();
 
         transliterator = Transliterator.getInstance("Latin-Katakana");
     }
@@ -133,7 +135,7 @@ class KatakanaGenerator {
         }
 
         PhonemeMapEntry last = null;
-        for (MaryDuration duration : mary.generate(english)) {
+        for (MaryDuration duration : mary.generateReading(english)) {
             String englishPhoneme = duration.getPhoneme();
             if ("_".equals(englishPhoneme)) {
                 if (last != null && last.type == Type.CONSONANT) {

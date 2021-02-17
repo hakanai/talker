@@ -2,6 +2,7 @@ package org.trypticon.talker.speech;
 
 import org.trypticon.talker.config.Configuration;
 import org.trypticon.talker.speech.mac.MacSpeaker;
+import org.trypticon.talker.speech.marytts.MaryTTSSpeaker;
 import org.trypticon.talker.speech.robokoe.RoboKoeSpeaker;
 import org.trypticon.talker.speech.sapi.SapiSpeaker;
 
@@ -19,6 +20,8 @@ public class SpeakerFactory {
                 return new RoboKoeSpeaker(speakerConfiguration);
             case "sapi":
                 return new SapiSpeaker(speakerConfiguration);
+            case "marytts":
+                return new MaryTTSSpeaker(speakerConfiguration);
             default:
                 throw new IllegalArgumentException("Unknown voice provider: " + providerName);
         }
