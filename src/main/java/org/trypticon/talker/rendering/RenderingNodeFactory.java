@@ -18,7 +18,7 @@ public class RenderingNodeFactory implements NodeFactory {
     public Node create(Graph graph, TalkerContext context, String providerId, Configuration configuration) {
         switch (providerId) {
             case "render_message":
-                return new RenderMessageNode(context.getView());
+                return new RenderMessageNode(graph, providerId, context.getView());
             default:
                 return null;
         }

@@ -32,9 +32,9 @@ dependencies {
     val guavaVersion = "30.1-jre"
     implementation("com.google.guava:guava:${guavaVersion}")
 
-//    val jnaVersion = "5.7.0"
-//    implementation("net.java.dev.jna:jna:${jnaVersion}")
-//    implementation("net.java.dev.jna:jna-platform:${jnaVersion}")
+    val jnaVersion = "5.7.0"
+    implementation("net.java.dev.jna:jna:${jnaVersion}")
+    implementation("net.java.dev.jna:jna-platform:${jnaVersion}")
 
     val kuromojiVersion = "0.7.7"
     implementation("org.atilika.kuromoji:kuromoji:${kuromojiVersion}")

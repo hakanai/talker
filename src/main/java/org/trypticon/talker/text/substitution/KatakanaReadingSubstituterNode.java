@@ -3,6 +3,7 @@ package org.trypticon.talker.text.substitution;
 import java.util.LinkedList;
 import java.util.List;
 
+import org.trypticon.talker.config.Configuration;
 import org.trypticon.talker.model.Graph;
 import org.trypticon.talker.text.Text;
 import org.trypticon.talker.text.Token;
@@ -15,11 +16,15 @@ import org.trypticon.talker.text.TokenType;
  *    the non-Japanese parts to Japanese by filling in readings for everything else.
  *    Or at least everything else we know how to convert...</p>
  */
-public class KatakanaReadingSubstituter extends SubstituterNode implements Substituter {
+public class KatakanaReadingSubstituterNode extends SubstituterNode implements Substituter {
     private final KatakanaGenerator katakana = new KatakanaGenerator();
 
-    KatakanaReadingSubstituter(Graph graph) {
-        super(graph, "Substitute: Katakana Readings");
+    KatakanaReadingSubstituterNode(Graph graph, String providerId) {
+        super(graph, providerId, "Substitute: Katakana Readings");
+    }
+
+    @Override
+    public void populateConfiguration(Configuration.Builder builder) {
     }
 
     @Override

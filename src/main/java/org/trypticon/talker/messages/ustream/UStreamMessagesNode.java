@@ -35,17 +35,20 @@ public class UStreamMessagesNode extends Node implements Startable {
     private final OutputConnector messagesConnector;
     private final OutputConnector statusEventsConnector;
 
+    private int channelId;
     private Timer timer;
 
     private int nextRefreshInterval;
     private long nextRangeStart;
 
-    public UStreamMessagesNode(Graph graph, int channelId) {
-        super("UStream Messages",
+    public UStreamMessagesNode(Graph graph, String providerId, Configuration configuration) {
+        super(graph, providerId, "UStream Messages",
                 ImmutableList.of(),
                 ImmutableList.of(
-                        new OutputConnector("messages", "Messages", ConnectorType.TEXT, graph),
-                        new OutputConnector("statusEvents", "Status Events", ConnectorType.TEXT, graph)));
+                        new OutputConnector("messages", "Messages", ConnectorType.TEXT),
+                        new OutputConnector("statusEvents", "Status Events", ConnectorType.TEXT)));
+
+        channelId = configuration.getRequiredInt("channelId");
 
         messagesConnector = getOutputConnectors().get(0);
         statusEventsConnector = getOutputConnectors().get(1);
@@ -54,8 +57,9 @@ public class UStreamMessagesNode extends Node implements Startable {
         baseUrl = "http://socialstream.ustream.tv/socialstream/get.json/" + channelId;
     }
 
-    public UStreamMessagesNode(Graph graph, Configuration configuration) {
-        this(graph, configuration.getRequiredInt("channelId"));
+    @Override
+    public void populateConfiguration(Configuration.Builder builder) {
+        builder.put("channelId", channelId);
     }
 
     public String getPreferenceSubKey() {

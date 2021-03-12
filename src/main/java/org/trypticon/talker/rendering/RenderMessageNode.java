@@ -8,8 +8,10 @@ import java.util.Locale;
 
 import com.google.common.collect.ImmutableList;
 import org.trypticon.talker.TalkerView;
+import org.trypticon.talker.config.Configuration;
 import org.trypticon.talker.messages.Message;
 import org.trypticon.talker.model.ConnectorType;
+import org.trypticon.talker.model.Graph;
 import org.trypticon.talker.model.InputConnector;
 import org.trypticon.talker.model.Node;
 
@@ -21,8 +23,8 @@ public class RenderMessageNode extends Node {
 
     private String lastDayDivider;
 
-    public RenderMessageNode(TalkerView view) {
-        super("Render Messages",
+    public RenderMessageNode(Graph graph, String providerId, TalkerView view) {
+        super(graph, providerId, "Render Messages",
                 ImmutableList.of(new InputConnector("messages", "Messages", ConnectorType.MESSAGE)),
                 ImmutableList.of());
 
@@ -30,6 +32,10 @@ public class RenderMessageNode extends Node {
 
         dateFormatter = DateTimeFormatter.ofLocalizedDate(FormatStyle.MEDIUM);
         timeFormatter = DateTimeFormatter.ofLocalizedTime(FormatStyle.MEDIUM);
+    }
+
+    @Override
+    public void populateConfiguration(Configuration.Builder builder) {
     }
 
     @Override

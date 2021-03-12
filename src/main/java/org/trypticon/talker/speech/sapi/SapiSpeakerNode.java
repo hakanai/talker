@@ -7,43 +7,42 @@ import java.util.Collections;
 
 import com.google.common.base.Strings;
 import org.trypticon.talker.config.Configuration;
-import org.trypticon.talker.speech.Speaker;
+import org.trypticon.talker.model.Graph;
+import org.trypticon.talker.speech.SpeakerNode;
 import org.trypticon.talker.speech.util.ProcessUtils;
 import org.trypticon.talker.text.Text;
 
 /**
  * Speaker using Microsoft's Speech API (SAPI).
  */
-public class SapiSpeaker implements Speaker {
+public class SapiSpeakerNode extends SpeakerNode {
     private final String executable;
     private final String voice;
     private final int rate;
+    private final boolean force32Bit;
 
-    public SapiSpeaker(String voice, int rate, boolean force32Bit) {
+    public SapiSpeakerNode(Graph graph, String providerId, Configuration configuration) {
+        super(graph, providerId, "Speaker: SAPI");
+
+        voice = configuration.getOptionalString("voice").orElse(null);
+        rate = configuration.getOptionalInt("rate").orElse(0);
+        force32Bit = configuration.getOptionalBoolean("force32Bit").orElse(false);
+
         if (force32Bit) {
+            // TODO: Potential for some JNA use here.
+            //       Shell32Util.getKnownFolderPath(KnownFolders.FOLDERID_System)
+            //       Shell32Util.getKnownFolderPath(KnownFolders.FOLDERID_SystemX86)
             executable = System.getenv("WINDIR") + "/SysWOW64/cscript.exe";
         } else {
             executable = "cscript.exe";
         }
-
-        this.voice = voice;
-        this.rate = rate;
-    }
-
-    public SapiSpeaker(Configuration configuration) {
-        this(configuration.getOptionalString("voice", null),
-                configuration.getOptionalInt("rate", 0),
-                configuration.getOptionalBoolean("force32Bit", false));
     }
 
     @Override
-    public String getId() {
-        return "speaker_sapi";
-    }
-
-    @Override
-    public String getName() {
-        return "SAPI";
+    public void populateConfiguration(Configuration.Builder builder) {
+        builder.putIfNotNull("voice", voice)
+                .put("rate", rate)
+                .put("force32Bit", force32Bit);
     }
 
     @Override

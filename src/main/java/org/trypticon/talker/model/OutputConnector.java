@@ -4,17 +4,17 @@ package org.trypticon.talker.model;
  * Model for a single connector.
  */
 public class OutputConnector extends Connector {
-    private final Graph graph;
-
-    public OutputConnector(String id, String name, ConnectorType type, Graph graph) {
+    public OutputConnector(String id, String name, ConnectorType type) {
         super(id, name, type);
+    }
 
-        this.graph = graph;
+    private Graph getGraph() {
+        return getParent().getGraph();
     }
 
     public void push(Object data) {
         // TODO: Probably should be in new background task for each?
-        graph.getConnectionsFor(this).forEach(connection -> connection.push(data));
+        getGraph().getConnectionsFor(this).forEach(connection -> connection.push(data));
     }
 
 }

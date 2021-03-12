@@ -6,29 +6,24 @@ import org.trypticon.talker.config.Configuration;
 import org.trypticon.talker.model.Graph;
 import org.trypticon.talker.model.Node;
 import org.trypticon.talker.model.NodeFactory;
-import org.trypticon.talker.speech.mac.MacSpeaker;
-import org.trypticon.talker.speech.marytts.MaryTTSSpeaker;
-import org.trypticon.talker.speech.robokoe.RoboKoeSpeaker;
-import org.trypticon.talker.speech.sapi.SapiSpeaker;
+import org.trypticon.talker.speech.mac.MacSpeakerNode;
+import org.trypticon.talker.speech.marytts.MaryTTSSpeakerNode;
+import org.trypticon.talker.speech.robokoe.RoboKoeSpeakerNode;
+import org.trypticon.talker.speech.sapi.SapiSpeakerNode;
 
 public class SpeakerNodeFactory implements NodeFactory {
     @Nullable
     @Override
     public Node create(Graph graph, TalkerContext context, String providerId, Configuration configuration) {
-        Speaker speaker = createSpeaker(providerId, configuration);
-        return new SpeakerNode("Speaker: " + speaker.getName(), speaker);
-    }
-
-    private Speaker createSpeaker(String providerId, Configuration configuration) {
         switch (providerId) {
             case "speaker_macos":
-                return new MacSpeaker(configuration);
+                return new MacSpeakerNode(graph, providerId, configuration);
             case "speaker_miku_speak":
-                return new RoboKoeSpeaker(configuration);
+                return new RoboKoeSpeakerNode(graph, providerId, configuration);
             case "speaker_sapi":
-                return new SapiSpeaker(configuration);
+                return new SapiSpeakerNode(graph, providerId, configuration);
             case "speaker_marytts":
-                return new MaryTTSSpeaker(configuration);
+                return new MaryTTSSpeakerNode(graph, providerId, configuration);
             default:
                 return null;
         }

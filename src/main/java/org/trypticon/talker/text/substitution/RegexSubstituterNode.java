@@ -17,21 +17,21 @@ public class RegexSubstituterNode extends TokenByTokenSubstituterNode {
     private final Pattern regex;
     private final String replacement;
 
-    public RegexSubstituterNode(Graph graph, TokenType inputType, TokenType outputType, String regex, String replacement) {
-        super(graph, "Substitute: Regex");
+    public RegexSubstituterNode(Graph graph, String providerId, Configuration configuration) {
+        super(graph, providerId, "Substitute: Regex");
 
-        this.inputType = inputType;
-        this.outputType = outputType;
-        this.regex = Pattern.compile(regex);
-        this.replacement = replacement;
+        inputType = TokenType.valueOf(configuration.getRequiredString("inputType"));
+        outputType = TokenType.valueOf(configuration.getRequiredString("outputType"));
+        regex = Pattern.compile(configuration.getRequiredString("regex"));
+        replacement = configuration.getRequiredString("replacement");
     }
 
-    public RegexSubstituterNode(Graph graph, Configuration configuration) {
-        this(graph,
-                TokenType.valueOf(configuration.getRequiredString("inputType")),
-                TokenType.valueOf(configuration.getRequiredString("outputType")),
-                configuration.getRequiredString("regex"),
-                configuration.getRequiredString("replacement"));
+    @Override
+    public void populateConfiguration(Configuration.Builder builder) {
+        builder.put("inputType", inputType.name())
+                .put("outputType", outputType.name())
+                .put("regex", regex.pattern())
+                .put("replacement", replacement);
     }
 
     @Override

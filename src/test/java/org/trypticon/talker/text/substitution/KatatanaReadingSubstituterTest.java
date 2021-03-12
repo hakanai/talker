@@ -5,7 +5,6 @@ import java.util.Collections;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.trypticon.talker.model.Graph;
-import org.trypticon.talker.speech.sapi.SapiSpeaker;
 import org.trypticon.talker.text.Text;
 import org.trypticon.talker.text.Token;
 import org.trypticon.talker.text.TokenType;
@@ -14,15 +13,15 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 
 /**
- * Tests for {@link KatakanaReadingSubstituter}.
+ * Tests for {@link KatakanaReadingSubstituterNode}.
  */
 public class KatatanaReadingSubstituterTest {
 
-    private KatakanaReadingSubstituter substituter;
+    private KatakanaReadingSubstituterNode substituter;
 
     @BeforeEach
     public void setUp() {
-        substituter = new KatakanaReadingSubstituter(new Graph());
+        substituter = new KatakanaReadingSubstituterNode(new Graph(), "substituter_katakana_reading");
     }
 
     @Test
@@ -127,9 +126,6 @@ public class KatatanaReadingSubstituterTest {
         Text inputText = new Text(Collections.singletonList(
                 new Token(input, TokenType.OTHER)));
         Text outputText = substituter.substitute(inputText);
-
-        new SapiSpeaker("Miku", 4, false).speak(outputText);
-
         return outputText.getContent();
     }
 }

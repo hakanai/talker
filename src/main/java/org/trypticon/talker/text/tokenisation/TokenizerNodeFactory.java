@@ -13,7 +13,7 @@ public class TokenizerNodeFactory implements NodeFactory {
     public Node create(Graph graph, TalkerContext context, String providerId, Configuration configuration) {
         switch (providerId) {
             case "tokenizer_kuromoji":
-                return new KuromojiTokenizerNode(graph, configuration);
+                return new KuromojiTokenizerNode(graph, providerId);
             default:
                 return null;
         }

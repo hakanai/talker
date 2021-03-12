@@ -11,8 +11,8 @@ import org.trypticon.talker.text.Token;
  * A substituter which works by substituting each token in turn.
  */
 public abstract class TokenByTokenSubstituterNode extends SubstituterNode {
-    protected TokenByTokenSubstituterNode(Graph graph, String name) {
-        super(graph, name);
+    protected TokenByTokenSubstituterNode(Graph graph, String providerId, String name) {
+        super(graph, providerId, name);
     }
 
     @Override

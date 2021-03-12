@@ -17,9 +17,9 @@ public class SubstituterNodeFactory implements NodeFactory {
     public Node create(Graph graph, TalkerContext context, String providerId, Configuration configuration) {
         switch (providerId) {
             case "substituter_katakana_reading":
-                return new KatakanaReadingSubstituter(graph);
+                return new KatakanaReadingSubstituterNode(graph, providerId);
             case "substituter_regex":
-                return new RegexSubstituterNode(graph, configuration);
+                return new RegexSubstituterNode(graph, providerId, configuration);
             default:
                 return null;
         }

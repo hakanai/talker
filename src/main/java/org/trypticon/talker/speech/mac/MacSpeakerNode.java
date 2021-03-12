@@ -1,32 +1,29 @@
 package org.trypticon.talker.speech.mac;
 
+import javax.annotation.Nullable;
+
 import org.trypticon.talker.config.Configuration;
-import org.trypticon.talker.speech.Speaker;
+import org.trypticon.talker.model.Graph;
+import org.trypticon.talker.speech.SpeakerNode;
 import org.trypticon.talker.speech.util.ProcessUtils;
 import org.trypticon.talker.text.Text;
 
 /**
  * Speaker using the 'say' command on OSX to do the speech.
  */
-public class MacSpeaker implements Speaker {
+public class MacSpeakerNode extends SpeakerNode {
+    @Nullable
     private final String voice;
 
-    public MacSpeaker(String voice) {
-        this.voice = voice;
-    }
+    public MacSpeakerNode(Graph graph, String providerId, Configuration configuration) {
+        super(graph, providerId, "Speaker: macOS");
 
-    public MacSpeaker(Configuration configuration) {
-        this(configuration.getOptionalString("voice", null));
-    }
-
-    @Override
-    public String getId() {
-        return "speaker_macos";
+        voice = configuration.getOptionalString("voice").orElse(null);
     }
 
     @Override
-    public String getName() {
-        return "macOS";
+    public void populateConfiguration(Configuration.Builder builder) {
+        builder.putIfNotNull("voice", voice);
     }
 
     @Override

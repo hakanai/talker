@@ -11,10 +11,10 @@ import org.trypticon.talker.text.Text;
 public abstract class SubstituterNode extends Node implements Substituter {
     private final OutputConnector outputConnector;
 
-    protected SubstituterNode(Graph graph, String name) {
-        super(name,
+    protected SubstituterNode(Graph graph, String providerId, String name) {
+        super(graph, providerId, name,
                 ImmutableList.of(new InputConnector("analyzedText", "Analyzed Text", ConnectorType.TEXT)),
-                ImmutableList.of(new OutputConnector("analyzedText", "Analyzed Text", ConnectorType.TEXT, graph)));
+                ImmutableList.of(new OutputConnector("analyzedText", "Analyzed Text", ConnectorType.TEXT)));
 
         outputConnector = getOutputConnectors().get(0);
     }

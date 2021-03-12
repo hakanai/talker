@@ -18,7 +18,7 @@ public class MessageStreamNodeFactory implements NodeFactory {
     public Node create(Graph graph, TalkerContext context, String providerId, Configuration configuration) {
         switch (providerId) {
             case "message_stream_ustream":
-                return new UStreamMessagesNode(graph, configuration);
+                return new UStreamMessagesNode(graph, providerId, configuration);
             default:
                 return null;
         }

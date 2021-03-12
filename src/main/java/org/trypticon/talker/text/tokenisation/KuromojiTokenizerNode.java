@@ -11,12 +11,16 @@ public class KuromojiTokenizerNode extends Node {
 
     private final OutputConnector analyzedTextConnector;
 
-    public KuromojiTokenizerNode(Graph graph, Configuration configuration) {
-        super("Kuromoji Tokenizer",
+    public KuromojiTokenizerNode(Graph graph, String providerId) {
+        super(graph, providerId, "Kuromoji Tokenizer",
                 ImmutableList.of(new InputConnector("messages", "Messages", ConnectorType.MESSAGE)),
-                ImmutableList.of(new OutputConnector("analyzedText", "Analyzed Text", ConnectorType.TEXT, graph)));
+                ImmutableList.of(new OutputConnector("analyzedText", "Analyzed Text", ConnectorType.TEXT)));
 
         analyzedTextConnector = getOutputConnectors().get(0);
+    }
+
+    @Override
+    public void populateConfiguration(Configuration.Builder builder) {
     }
 
     @Override

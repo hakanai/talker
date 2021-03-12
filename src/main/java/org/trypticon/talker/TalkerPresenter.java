@@ -4,7 +4,7 @@ import java.io.IOException;
 import java.nio.file.Paths;
 
 import org.trypticon.talker.config.Configuration;
-import org.trypticon.talker.config.ModelMarshalling;
+import org.trypticon.talker.config.GraphMarshalling;
 import org.trypticon.talker.model.Graph;
 
 /**
@@ -25,7 +25,7 @@ class TalkerPresenter {
         }
 
         TalkerContext context = new TalkerContext(view);
-        graph = ModelMarshalling.loadGraph(context, configuration);
+        graph = GraphMarshalling.loadGraph(context, configuration);
     }
 
     public void start() {
