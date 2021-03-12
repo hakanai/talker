@@ -1,6 +1,10 @@
 Talker (temporary name)
 =======================
 
+***Note: Thanks to UStream being bought out by IBM, this tool is currently in a
+non-working state. It is being redeveloped to support more inputs and a proper
+configuration UI.***
+
 What is it?
 -----------
 
@@ -23,37 +27,23 @@ Robokoe.
 Roadmap
 -------
 
-* Come up with a real name for the tool.
-* Move configuration properly into the GUI.
-* Add support for more message backends. Candidates:
-    * Twitter
-    * Niconico
-    * IRC
-    * YouTube
-    * Twitch
-    * Discord
-* Add support for more speech backends. Candidates:
-    * VOICEROID (drive the GUI? Or use an existing tool that drives the GUI?)
-* Remove reliance on Robokoe. It should be possible to call a VST using JVstHost,
-  but I found that library not to work and help does not appear to be forthcoming.
-  Benefits if it can be made to work:
-    * Better timing of syllables
-    * Possibly even pitch variation
-    * Support on Mac OS X (yes, VOCALOID runs on Macs now.)
+Now tracked in [GitHub Issues](https://github.com/hakanai/talker/issues).
 
 Building
 --------
 
-There is no proper build in place yet. I have been running the GUI from IDEA.
-However, everything is in pretty sensible locations so it should be fairly easy to get it to build.
+`./gradlew build`
 
 Running
 -------
 
-The main entry point is `TalkerMain`. Running that will pop up a GUI. However, you will want to configure it first.
+`./gradlew run`
 
 Configuring
 -----------
+
+***Information in this section is very out of date and much of it will be obsolete
+when the configuration UI is completed.***
 
 Copy `config.json.example` to `config.json` and edit it.
 
