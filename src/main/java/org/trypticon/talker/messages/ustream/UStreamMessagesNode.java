@@ -14,39 +14,57 @@ import java.util.TimerTask;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import com.google.common.collect.ImmutableList;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import org.trypticon.talker.config.Configuration;
-import org.trypticon.talker.messages.AbstractMessageStream;
 import org.trypticon.talker.messages.Message;
+import org.trypticon.talker.model.*;
 
 /**
  * Reads the UStream social stream.
  */
-public class UStreamMessageStream extends AbstractMessageStream {
+public class UStreamMessagesNode extends Node implements Startable {
     private static final Pattern cleanTextRegex = Pattern.compile("^(.*)\\s*\\(.*live at http://ustre.am/[0-9a-zA-Z]+\\)$");
 
     private final String preferenceSubKey;
     private final String baseUrl;
+
+    private final OutputConnector messagesConnector;
+    private final OutputConnector statusEventsConnector;
+
     private Timer timer;
 
     private int nextRefreshInterval;
     private long nextRangeStart;
 
-    public UStreamMessageStream(int channelId) {
+    public UStreamMessagesNode(Graph graph, int channelId) {
+        super("UStream Messages",
+                ImmutableList.of(),
+                ImmutableList.of(
+                        new OutputConnector("messages", "Messages", ConnectorType.TEXT, graph),
+                        new OutputConnector("statusEvents", "Status Events", ConnectorType.TEXT, graph)));
+
+        messagesConnector = getOutputConnectors().get(0);
+        statusEventsConnector = getOutputConnectors().get(1);
+
         preferenceSubKey = "ustream/" + channelId;
         baseUrl = "http://socialstream.ustream.tv/socialstream/get.json/" + channelId;
     }
 
-    public UStreamMessageStream(Configuration configuration) {
-        this(configuration.getInt("channelId"));
+    public UStreamMessagesNode(Graph graph, Configuration configuration) {
+        this(graph, configuration.getRequiredInt("channelId"));
+    }
+
+    public String getPreferenceSubKey() {
+        return preferenceSubKey;
     }
 
     @Override
-    public String getPreferenceSubKey() {
-        return preferenceSubKey;
+    public void push(InputConnector connector, Object data) {
+        // No input
     }
 
     @Override
@@ -70,7 +88,7 @@ public class UStreamMessageStream extends AbstractMessageStream {
     }
 
     private void fetchNewMessages() {
-        fireRefreshStarted();
+        sendOutput(statusEventsConnector, newStatusMessage("Refresh Started"));
 
         URL url;
         try {
@@ -117,6 +135,18 @@ public class UStreamMessageStream extends AbstractMessageStream {
                 } else {
                     // Normal message
                     Instant timestamp = Instant.ofEpochSecond(itemObject.get("createdAt").getAsLong());
+
+                    /* TODO - Resurrect last spoken message tracking. nextRangeStart might work?
+                    // TODO: Filtering already processed messages should perhaps be handled internally by the source
+                    // Only speaks messages if they haven't been spoken before, to reduce annoyance.
+                    long thisMessageMillis = message.getTimestamp().toEpochMilli();
+                    if (thisMessageMillis > lastSpokenMessage) {
+                        speechQueue.post(message.getText());
+                        lastSpokenMessage = thisMessageMillis;
+                        preferences.putLong("lastSpokenMessage", thisMessageMillis);
+                    }
+                    */
+
                     System.out.println(itemObject);
                     String speaker = itemObject.get("displayName").getAsString().trim();
                     URL speakerIcon = new URL(itemObject.get("profilePictureUrl").getAsString().trim());
@@ -128,7 +158,7 @@ public class UStreamMessageStream extends AbstractMessageStream {
                         text = matcher.group(1);
                     }
 
-                    fireMessageReceived(new Message(timestamp, speaker, speakerIcon, text));
+                    sendOutput(messagesConnector, new Message(timestamp, speaker, speakerIcon, text));
                 }
             }
 
@@ -152,12 +182,12 @@ public class UStreamMessageStream extends AbstractMessageStream {
 //            System.out.println("Will make next request at: " + new Date(nextRequestTime));
             timer.schedule(fetchNewMessagesTask(), new Date(nextRequestTime));
 
-            fireRefreshFinished();
+            sendOutput(statusEventsConnector, newStatusMessage("Refresh Finished"));
         } catch (IOException e) {
             e.printStackTrace();
 
             //TODO: Indicate the type of error somehow...
-            fireRefreshFailed();
+            sendOutput(statusEventsConnector, newStatusMessage("Refresh Failed"));
 
             //TODO: Some kind of exponential back-off?
             long now = System.currentTimeMillis();
@@ -170,6 +200,11 @@ public class UStreamMessageStream extends AbstractMessageStream {
             long nextRequestTime = now + retry*1000;
             timer.schedule(fetchNewMessagesTask(), new Date(nextRequestTime));
         }
+    }
+
+    private static Message newStatusMessage(String text) {
+        // TODO: Get some generic system icon?
+        return new Message(Instant.now(), "UStream", null, text);
     }
 
 }

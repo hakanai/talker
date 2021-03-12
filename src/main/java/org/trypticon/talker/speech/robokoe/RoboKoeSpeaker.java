@@ -4,28 +4,33 @@ import org.trypticon.talker.config.Configuration;
 import org.trypticon.talker.speech.Speaker;
 import org.trypticon.talker.speech.util.ProcessUtils;
 import org.trypticon.talker.text.Text;
-import org.trypticon.talker.text.substitution.KatakanaReadingSubstituter;
 
 /**
  * Speaker using {@code miku_speak.exe} AKA "�����~�N�̃��{��" to do the speech.
  */
 public class RoboKoeSpeaker implements Speaker {
     private final String executable;
-    private final KatakanaReadingSubstituter readingSubstituter = new KatakanaReadingSubstituter();
 
     public RoboKoeSpeaker(String executable) {
         this.executable = executable;
     }
 
     public RoboKoeSpeaker(Configuration configuration) {
-        this(configuration.getString("executable"));
+        this(configuration.getRequiredString("executable"));
    }
 
     @Override
-    public void speak(Text text) {
+    public String getId() {
+        return "speaker_miku_speak";
+    }
 
-        // This app can't read non-Japanese characters at all, so we substitute.
-        text = readingSubstituter.substitute(text);
+    @Override
+    public String getName() {
+        return "miku_speak";
+    }
+
+    @Override
+    public void speak(Text text) {
 
         //TODO: This process exits before it has finished. :(
         ProcessUtils.execAndWait(executable, text.getContent());

@@ -10,10 +10,10 @@ import org.trypticon.talker.swing.ComponentMover;
 public class ConnectorLinker extends ComponentMover {
     public static final ConnectorLinker INSTANCE = new ConnectorLinker();
 
-    private Node sourceNode;
-    private Connector sourceConnector;
-    private Connection ephemeralConnection;
-    private Connector overConnector;
+    private NodeView sourceNode;
+    private ConnectorView sourceConnector;
+    private ConnectionView ephemeralConnection;
+    private ConnectorView overConnector;
 
     private double distanceDrawnSoFar;
     private Point lastLocation;
@@ -23,7 +23,7 @@ public class ConnectorLinker extends ComponentMover {
 
     @Override
     public void mouseEntered(MouseEvent event) {
-        overConnector = (Connector) event.getSource();
+        overConnector = (ConnectorView) event.getSource();
         System.out.println("overConnector now " + overConnector);
     }
 
@@ -35,9 +35,9 @@ public class ConnectorLinker extends ComponentMover {
 
     @Override
     protected Component getDraggedComponent(Component source) {
-        sourceConnector = (Connector) source;
-        sourceNode = (Node) SwingUtilities.getAncestorOfClass(Node.class, source);
-        Connector draggedClone = sourceConnector.createCloneForDrag();
+        sourceConnector = (ConnectorView) source;
+        sourceNode = (NodeView) SwingUtilities.getAncestorOfClass(NodeView.class, source);
+        ConnectorView draggedClone = sourceConnector.createCloneForDrag();
 
         distanceDrawnSoFar = 1.0;
         ephemeralConnection = sourceConnector.connectTo(draggedClone, distanceDrawnSoFar);

@@ -17,7 +17,18 @@ public class MaryTTSSpeaker implements Speaker {
     private final MaryAudioFactory wrapper;
 
     public MaryTTSSpeaker(Configuration speakerConfiguration) {
-        wrapper = new MaryAudioFactory(speakerConfiguration.getString("voice"));
+        String voice = speakerConfiguration.getOptionalString("voice", null);
+        wrapper = new MaryAudioFactory(voice);
+    }
+
+    @Override
+    public String getId() {
+        return "speaker_marytts";
+    }
+
+    @Override
+    public String getName() {
+        return "MaryTTS";
     }
 
     @Override

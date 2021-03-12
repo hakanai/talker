@@ -9,8 +9,7 @@ public class SettingsFrame extends JFrame {
 
         setLayout(new BorderLayout());
 
-        JToolBar toolBar = new JToolBar("Tools", JToolBar.VERTICAL);
-        toolBar.add(new JToggleButton("Select"));
+        SettingsToolBar toolBar = new SettingsToolBar();
         add(toolBar, BorderLayout.LINE_START);
 
         SettingsGraph graph = new SettingsGraph();

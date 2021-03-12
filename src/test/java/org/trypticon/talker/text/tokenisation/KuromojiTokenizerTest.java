@@ -12,14 +12,14 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
 
 /**
- * Tests for {@link KuromojiTokeniser}.
+ * Tests for {@link KuromojiTokenizer}.
  */
-public class KuromojiTokeniserTest {
-    private KuromojiTokeniser tokeniser;
+public class KuromojiTokenizerTest {
+    private KuromojiTokenizer tokeniser;
 
     @BeforeEach
     public void setUp() {
-        tokeniser = new KuromojiTokeniser();
+        tokeniser = new KuromojiTokenizer();
     }
 
     @Test

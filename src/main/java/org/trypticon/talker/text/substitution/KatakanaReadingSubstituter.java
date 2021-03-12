@@ -1,11 +1,12 @@
 package org.trypticon.talker.text.substitution;
 
+import java.util.LinkedList;
+import java.util.List;
+
+import org.trypticon.talker.model.Graph;
 import org.trypticon.talker.text.Text;
 import org.trypticon.talker.text.Token;
 import org.trypticon.talker.text.TokenType;
-
-import java.util.LinkedList;
-import java.util.List;
 
 /**
  * <p>Fills in Katakana for words which Kuromoji can't read.</p>
@@ -14,8 +15,12 @@ import java.util.List;
  *    the non-Japanese parts to Japanese by filling in readings for everything else.
  *    Or at least everything else we know how to convert...</p>
  */
-public class KatakanaReadingSubstituter implements Substituter {
+public class KatakanaReadingSubstituter extends SubstituterNode implements Substituter {
     private final KatakanaGenerator katakana = new KatakanaGenerator();
+
+    KatakanaReadingSubstituter(Graph graph) {
+        super(graph, "Substitute: Katakana Readings");
+    }
 
     @Override
     public Text substitute(Text text) {

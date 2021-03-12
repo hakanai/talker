@@ -9,16 +9,16 @@ import org.trypticon.talker.util.Colors;
 /**
  * A connection between two connectors.
  */
-public class Connection {
+public class ConnectionView {
     private final SettingsGraph graph;
-    private final Connector source;
-    private final Connector target;
+    private final ConnectorView source;
+    private final ConnectorView target;
     private double cableLength;
     private final BasicStroke stroke;
     private final Paint paint;
     private final Catenary catenary;
 
-    public Connection(SettingsGraph graph, Connector source, Connector target, double cableLength) {
+    public ConnectionView(SettingsGraph graph, ConnectorView source, ConnectorView target, double cableLength) {
         this.graph = graph;
         this.source = source;
         this.target = target;
@@ -41,11 +41,11 @@ public class Connection {
         catenary = new Catenary();
     }
 
-    public Connector getSource() {
+    public ConnectorView getSource() {
         return source;
     }
 
-    public Connector getTarget() {
+    public ConnectorView getTarget() {
         return target;
     }
 

@@ -5,11 +5,11 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Collections;
 
+import com.google.common.base.Strings;
 import org.trypticon.talker.config.Configuration;
 import org.trypticon.talker.speech.Speaker;
 import org.trypticon.talker.speech.util.ProcessUtils;
 import org.trypticon.talker.text.Text;
-import org.trypticon.talker.text.substitution.KatakanaReadingSubstituter;
 
 /**
  * Speaker using Microsoft's Speech API (SAPI).
@@ -18,8 +18,6 @@ public class SapiSpeaker implements Speaker {
     private final String executable;
     private final String voice;
     private final int rate;
-
-    private final KatakanaReadingSubstituter readingSubstituter = new KatakanaReadingSubstituter();
 
     public SapiSpeaker(String voice, int rate, boolean force32Bit) {
         if (force32Bit) {
@@ -33,16 +31,23 @@ public class SapiSpeaker implements Speaker {
     }
 
     public SapiSpeaker(Configuration configuration) {
-        this(configuration.getString("voice"),
-                configuration.getInt("rate"),
-                configuration.getBoolean("force32Bit"));
+        this(configuration.getOptionalString("voice", null),
+                configuration.getOptionalInt("rate", 0),
+                configuration.getOptionalBoolean("force32Bit", false));
+    }
+
+    @Override
+    public String getId() {
+        return "speaker_sapi";
+    }
+
+    @Override
+    public String getName() {
+        return "SAPI";
     }
 
     @Override
     public void speak(Text text) {
-
-        text = readingSubstituter.substitute(text);
-
         Path tempFile = null;
         try {
             tempFile = Files.createTempFile("speak", ".js");
@@ -62,31 +67,48 @@ public class SapiSpeaker implements Speaker {
     }
 
     private void writeScript(Path file, String text) throws IOException {
-        String escapedVoice = escape(voice);
-        String escapedText = escape(text);
-        String script =
+
+        // XXX: Talking to COM directly would be nicer than what we're currently doing here.
+
+        StringBuilder script = new StringBuilder(
                 "var VoiceObj = new ActiveXObject(\"Sapi.SpVoice\");\n" +
                 "var AvailableVoices = VoiceObj.GetVoices();\n" +
-                "var found = false;\n" +
-                "for (var i = 0; i< AvailableVoices.Count; i++)\n" +
-                "{\n" +
-                "    var name = AvailableVoices.Item(i).GetDescription();\n" +
-                "    if (name == \"" + escapedVoice + "\")\n" +
-                "    {\n" +
-                "        found = true;\n" +
-                "        VoiceObj.Voice = AvailableVoices.Item(i);\n" +
-                "    }\n" +
-                "}\n" +
-                "if ( found ) {\n" +
-                "    VoiceObj.Rate = " + rate + ";\n" +
-                "    VoiceObj.Speak(\"" + escapedText + "\");\n" +
+                "var found = false;\n");
+        if (voice == null) {
+            script.append("for (var i = 0; i < AvailableVoices.Count; i++)\n" +
+                    "{\n" +
+                    "    found = true;\n" +
+                    "    VoiceObj.Voice = AvailableVoices.Item(i);\n" +
+                    "}\n");
+        } else {
+            script.append("for (var i = 0; i < AvailableVoices.Count; i++)\n" +
+                            "{\n" +
+                            "    var name = AvailableVoices.Item(i).GetDescription();\n" +
+                            "    if (name == \"").append(escapeJavaScript(voice)).append("\")\n" +
+                            "    {\n" +
+                            "        found = true;\n" +
+                            "        VoiceObj.Voice = AvailableVoices.Item(i);\n" +
+                            "    }\n" +
+                            "}\n");
+        }
+        script.append("if (found) {\n");
+        if (rate != 0) {
+            script.append("    VoiceObj.Rate = ").append(rate).append(";\n");
+        }
+        script.append(
+                "    VoiceObj.Speak(\"").append(escapeJavaScript(text)).append("\");\n" +
                 "} else {\n" +
                 "    WScript.Quit(1);\n" +
-                "}\n";
+                "}\n");
         Files.write(file, Collections.singletonList(script));
     }
 
-    private String escape(String string) {
+    private String escapeJavaScript(String string) {
+
+        // XXX: Guava doesn't have a JavaScript escaper yet:
+        //      https://github.com/google/guava/issues/1620
+        //      We could try to use Escapers to build one ourselves?
+
         StringBuilder result = new StringBuilder();
         for (int i = 0; i < string.length(); i++) {
             char ch = string.charAt(i);
@@ -101,9 +123,7 @@ public class SapiSpeaker implements Speaker {
                     // to use a sensible encoding to read the file.
                     if (ch > 0x7f) {
                         String hex = Integer.toString(ch, 16);
-                        while (hex.length() < 4) {
-                            hex = '0' + hex;
-                        }
+                        hex = Strings.padStart(hex, 4, '0');
                         result.append("\\u").append(hex);
                     } else {
                         result.append(ch);

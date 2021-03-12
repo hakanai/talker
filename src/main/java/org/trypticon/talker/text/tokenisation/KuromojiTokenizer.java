@@ -12,11 +12,11 @@ import java.util.regex.Pattern;
 /**
  * Tokeniser backed by Kuromoji.
  */
-public class KuromojiTokeniser {
+public class KuromojiTokenizer {
     private final Tokenizer tokeniser;
     private final Pattern wordPattern = Pattern.compile("\\w", Pattern.UNICODE_CHARACTER_CLASS);
 
-    public KuromojiTokeniser() {
+    public KuromojiTokenizer() {
         Tokenizer.Builder tokeniserBuilder = Tokenizer.builder();
         //TODO: User dictionary would go here.
         tokeniser = tokeniserBuilder.build();

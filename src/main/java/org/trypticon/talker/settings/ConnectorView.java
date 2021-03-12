@@ -4,14 +4,15 @@ import java.awt.*;
 import java.util.stream.Stream;
 import javax.swing.*;
 
+import org.trypticon.talker.model.ConnectorType;
 import org.trypticon.talker.swing.DragLayout;
 
-public class Connector extends JPanel {
+public class ConnectorView extends JPanel {
     private final SettingsGraph graph;
     private final ConnectorType type;
     private final ConnectorDirection direction;
 
-    public Connector(SettingsGraph graph, ConnectorDirection direction, ConnectorType type) {
+    public ConnectorView(SettingsGraph graph, ConnectorDirection direction, ConnectorType type) {
         this.graph = graph;
         this.direction = direction;
         this.type = type;
@@ -20,15 +21,15 @@ public class Connector extends JPanel {
         setBorder(BorderFactory.createLineBorder(Color.BLACK));
     }
 
-    public boolean canConnectTo(Connector overConnector) {
+    public boolean canConnectTo(ConnectorView overConnector) {
         return type == overConnector.type &&
                 direction != overConnector.direction;
     }
 
-    public Connection connectTo(Connector otherConnector, double cableLength) {
+    public ConnectionView connectTo(ConnectorView otherConnector, double cableLength) {
         // Are we the source or the target?
-        Connector source;
-        Connector target;
+        ConnectorView source;
+        ConnectorView target;
         if (direction == ConnectorDirection.OUTPUT) {
             source = this;
             target = otherConnector;
@@ -37,18 +38,18 @@ public class Connector extends JPanel {
             target = this;
         }
         // TODO: What if it's already connected?
-        Connection newConnection = new Connection(graph, source, target, cableLength);
+        ConnectionView newConnection = new ConnectionView(graph, source, target, cableLength);
         graph.add(newConnection);
         return newConnection;
     }
 
-    public Stream<Connection> getConnections() {
+    public Stream<ConnectionView> getConnections() {
         return graph.getConnectionsTo(this);
     }
 
-    public Connector createCloneForDrag() {
+    public ConnectorView createCloneForDrag() {
         // XXX: Direction perhaps dubious for this connector that isn't even connected.
-        Connector clone = new Connector(graph, direction, type);
+        ConnectorView clone = new ConnectorView(graph, direction, type);
 
         // Move a copy of the clone to the drag panel so that we can actually drag it around.
         // We have to fiddle the location to be relative to the right panel as well.

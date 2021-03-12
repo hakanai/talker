@@ -7,16 +7,16 @@ import javax.swing.*;
 import com.google.common.collect.ImmutableList;
 import org.trypticon.talker.swing.ComponentMover;
 
-public class Node extends JPanel {
+public class NodeView extends JPanel {
     private final SettingsGraph graph;
     private final JLabel titleLabel;
     private final JPanel inputConnectorsPanel = createInputConnectorsPanel();
     private final JPanel mainPanel = createMainPanel();
     private final JPanel outputConnectorsPanel = createOutputConnectorsPanel();
-    private final List<Connector> inputConnectors;
-    private final List<Connector> outputConnectors;
+    private final List<ConnectorView> inputConnectors;
+    private final List<ConnectorView> outputConnectors;
 
-    public Node(SettingsGraph graph, String title, Point initialLocation, List<Connector> inputConnectors, List<Connector> outputConnectors) {
+    public NodeView(SettingsGraph graph, String title, Point initialLocation, List<ConnectorView> inputConnectors, List<ConnectorView> outputConnectors) {
         this.graph = graph;
         setLocation(initialLocation);
         setBorder(BorderFactory.createLineBorder(Color.BLACK));
@@ -39,11 +39,11 @@ public class Node extends JPanel {
         outputConnectors.forEach(c -> c.addMouseListener(ConnectorLinker.INSTANCE));
     }
 
-    public List<Connector> getInputConnectors() {
+    public List<ConnectorView> getInputConnectors() {
         return inputConnectors;
     }
 
-    public List<Connector> getOutputConnectors() {
+    public List<ConnectorView> getOutputConnectors() {
         return outputConnectors;
     }
 

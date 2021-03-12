@@ -16,11 +16,25 @@ public class MacSpeaker implements Speaker {
     }
 
     public MacSpeaker(Configuration configuration) {
-        this(configuration.getString("voice"));
+        this(configuration.getOptionalString("voice", null));
+    }
+
+    @Override
+    public String getId() {
+        return "speaker_macos";
+    }
+
+    @Override
+    public String getName() {
+        return "macOS";
     }
 
     @Override
     public void speak(Text text) {
-        ProcessUtils.execAndWait("say", "-v", voice, text.getContent());
+        if (voice == null) {
+            ProcessUtils.execAndWait("say", text.getContent());
+        } else {
+            ProcessUtils.execAndWait("say", "-v", voice, text.getContent());
+        }
     }
 }

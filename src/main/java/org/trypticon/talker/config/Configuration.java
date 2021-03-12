@@ -1,16 +1,18 @@
 package org.trypticon.talker.config;
 
-import com.google.gson.JsonArray;
-import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
-import com.google.gson.JsonParser;
-
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
+import javax.annotation.Nonnull;
+
+import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 
 /**
  * Configuration holder.
@@ -37,16 +39,44 @@ public class Configuration {
         return new Configuration(configObject);
     }
 
-    public String getString(String key) {
-        return configObject.get(key).getAsString();
+    @Nonnull
+    private JsonElement getRequiredElement(String key) {
+        JsonElement element = configObject.get(key);
+        if (element == null) {
+            throw new IllegalArgumentException("Required config value was not set: " + key);
+        }
+        return element;
     }
 
-    public int getInt(String key) {
-        return configObject.get(key).getAsInt();
+    @Nonnull
+    private Optional<JsonElement> getOptionalElement(String key) {
+        return Optional.ofNullable(configObject.get(key));
     }
 
-    public boolean getBoolean(String key) {
-        return configObject.get(key).getAsBoolean();
+    public String getRequiredString(String key) {
+        return getRequiredElement(key).getAsString();
+    }
+
+    public String getOptionalString(String key, String defaultValue) {
+        return getOptionalElement(key)
+                .map(JsonElement::getAsString)
+                .orElse(defaultValue);
+    }
+
+    public int getRequiredInt(String key) {
+        return getRequiredElement(key).getAsInt();
+    }
+
+    public int getOptionalInt(String key, int defaultValue) {
+        return getOptionalElement(key)
+                .map(JsonElement::getAsInt)
+                .orElse(defaultValue);
+    }
+
+    public boolean getOptionalBoolean(String key, boolean defaultValue) {
+        return getOptionalElement(key)
+                .map(JsonElement::getAsBoolean)
+                .orElse(defaultValue);
     }
 
     public Configuration getSubSection(String key) {
