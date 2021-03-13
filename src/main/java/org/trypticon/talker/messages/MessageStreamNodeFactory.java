@@ -4,7 +4,7 @@ import javax.annotation.Nullable;
 
 import org.trypticon.talker.TalkerContext;
 import org.trypticon.talker.config.Configuration;
-import org.trypticon.talker.messages.ustream.UStreamMessagesNode;
+import org.trypticon.talker.messages.twitch.TwitchMessagesNode;
 import org.trypticon.talker.model.Graph;
 import org.trypticon.talker.model.Node;
 import org.trypticon.talker.model.NodeFactory;
@@ -17,8 +17,8 @@ public class MessageStreamNodeFactory implements NodeFactory {
     @Override
     public Node create(Graph graph, TalkerContext context, String providerId, Configuration configuration) {
         switch (providerId) {
-            case "message_stream_ustream":
-                return new UStreamMessagesNode(graph, providerId, configuration);
+            case "message_stream_twitch":
+                return new TwitchMessagesNode(graph, providerId, configuration);
             default:
                 return null;
         }
