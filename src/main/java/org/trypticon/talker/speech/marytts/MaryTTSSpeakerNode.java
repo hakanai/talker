@@ -33,7 +33,11 @@ public class MaryTTSSpeakerNode extends SpeakerNode {
     @Override
     public void speak(Text text) {
         try (AudioInputStream inputStream = wrapper.generateAudio(text.getContent())) {
-            new AudioPlayer(inputStream).start();
+            AudioPlayer player = new AudioPlayer(inputStream);
+            player.start();
+            player.join();
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
         } catch (IOException e) {
             throw new UncheckedIOException(e);
         }
