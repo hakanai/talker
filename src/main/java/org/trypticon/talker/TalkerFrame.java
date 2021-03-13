@@ -75,20 +75,17 @@ public class TalkerFrame extends JFrame implements TalkerView {
 
     @Override
     public void appendMarkup(String markup) {
-        HTMLDocument document = (HTMLDocument) editorPane.getDocument();
-        Element bottom = document.getElement("bottom");
-        try {
-            document.insertBeforeStart(bottom, markup);
-        } catch (BadLocationException | IOException e) {
-            throw new IllegalStateException("BadLocationException for a location given to us", e);
-        }
+        SwingUtilities.invokeLater(() -> {
+            HTMLDocument document = (HTMLDocument) editorPane.getDocument();
+            Element bottom = document.getElement("bottom");
+            try {
+                document.insertBeforeStart(bottom, markup);
+            } catch (BadLocationException | IOException e) {
+                throw new IllegalStateException("BadLocationException for a location given to us", e);
+            }
 
-        editorPane.scrollToReference("bottom");
-    }
-
-    @Override
-    public void updateStatus(String message) {
-        statusLabel.setText(message);
+            editorPane.scrollToReference("bottom2");
+        });
     }
 
     private static class CustomTextPane extends JTextPane {
@@ -100,6 +97,7 @@ public class TalkerFrame extends JFrame implements TalkerView {
             setText("<html>\n" +
                     "<body>\n" +
                     "<div id=\"bottom\">&nbsp;</div>\n" +
+                    "<a name=\"bottom2\">&nbsp;</a>\n" +
                     "</body>\n" +
                     "</html>");
         }

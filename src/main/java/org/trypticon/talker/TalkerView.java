@@ -11,5 +11,4 @@ public interface TalkerView {
 
     void appendMarkup(String markup);
 
-    void updateStatus(String message);
 }
