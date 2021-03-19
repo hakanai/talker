@@ -7,7 +7,7 @@ import javax.sound.sampled.AudioInputStream;
 import marytts.util.data.audio.AudioPlayer;
 import org.trypticon.talker.config.Configuration;
 import org.trypticon.talker.marytts.MaryAudioFactory;
-import org.trypticon.talker.model.Graph;
+import org.trypticon.talker.model.GraphLocation;
 import org.trypticon.talker.speech.SpeakerNode;
 import org.trypticon.talker.text.Text;
 
@@ -18,8 +18,8 @@ public class MaryTTSSpeakerNode extends SpeakerNode {
     private final String voice;
     private final MaryAudioFactory wrapper;
 
-    public MaryTTSSpeakerNode(Graph graph, String providerId, Configuration speakerConfiguration) {
-        super(graph, providerId, "Speaker: MaryTTS");
+    public MaryTTSSpeakerNode(GraphLocation graphLocation, String providerId, Configuration speakerConfiguration) {
+        super(graphLocation, providerId, "Speaker: MaryTTS");
 
         voice = speakerConfiguration.getOptionalString("voice").orElse(null);
         wrapper = new MaryAudioFactory(voice);

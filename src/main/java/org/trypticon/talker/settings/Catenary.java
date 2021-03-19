@@ -102,10 +102,12 @@ public class Catenary {
      * @param context the canvas context to draw the catenary on to.
      */
     void drawToCanvas(Graphics2D context) {
-        if (isStraight) {
-            drawLineSegments(curveData, context);
-        } else {
-            drawCurves(curveData, context);
+        if (curveData != null) {
+            if (isStraight) {
+                drawLineSegments(curveData, context);
+            } else {
+                drawCurves(curveData, context);
+            }
         }
     }
 

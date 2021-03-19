@@ -4,7 +4,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import org.trypticon.talker.config.Configuration;
-import org.trypticon.talker.model.Graph;
+import org.trypticon.talker.model.GraphLocation;
 import org.trypticon.talker.text.Token;
 import org.trypticon.talker.text.TokenType;
 
@@ -17,8 +17,8 @@ public class RegexSubstituterNode extends TokenByTokenSubstituterNode {
     private final Pattern regex;
     private final String replacement;
 
-    public RegexSubstituterNode(Graph graph, String providerId, Configuration configuration) {
-        super(graph, providerId, "Substitute: Regex");
+    public RegexSubstituterNode(GraphLocation graphLocation, String providerId, Configuration configuration) {
+        super(graphLocation, providerId, "Substitute: Regex");
 
         inputType = TokenType.valueOf(configuration.getRequiredString("inputType"));
         outputType = TokenType.valueOf(configuration.getRequiredString("outputType"));

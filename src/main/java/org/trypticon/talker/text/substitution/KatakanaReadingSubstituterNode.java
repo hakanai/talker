@@ -4,7 +4,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 import org.trypticon.talker.config.Configuration;
-import org.trypticon.talker.model.Graph;
+import org.trypticon.talker.model.GraphLocation;
 import org.trypticon.talker.text.Text;
 import org.trypticon.talker.text.Token;
 import org.trypticon.talker.text.TokenType;
@@ -19,8 +19,8 @@ import org.trypticon.talker.text.TokenType;
 public class KatakanaReadingSubstituterNode extends SubstituterNode implements Substituter {
     private final KatakanaGenerator katakana = new KatakanaGenerator();
 
-    KatakanaReadingSubstituterNode(Graph graph, String providerId) {
-        super(graph, providerId, "Substitute: Katakana Readings");
+    KatakanaReadingSubstituterNode(GraphLocation graphLocation, String providerId) {
+        super(graphLocation, providerId, "Substitute: Katakana Readings");
     }
 
     @Override

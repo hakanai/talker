@@ -1,23 +1,27 @@
 package org.trypticon.talker.model;
 
+import java.awt.*;
+import javax.annotation.Nullable;
+
 import com.google.common.collect.ImmutableList;
 import org.trypticon.talker.config.Configuration;
+import org.trypticon.talker.config.Configurator;
 
 /**
  * Model for a single node.
  */
 public abstract class Node {
-    private final Graph graph;
+    private final GraphLocation graphLocation;
     private final String providerId;
     private final String name;
     private final ImmutableList<InputConnector> inputConnectors;
     private final ImmutableList<OutputConnector> outputConnectors;
 
-    public Node(Graph graph, String providerId, String name,
+    public Node(GraphLocation graphLocation, String providerId, String name,
                 ImmutableList<InputConnector> inputConnectors,
                 ImmutableList<OutputConnector> outputConnectors) {
 
-        this.graph = graph;
+        this.graphLocation = graphLocation;
         this.providerId = providerId;
         this.name = name;
         this.inputConnectors = inputConnectors;
@@ -34,7 +38,11 @@ public abstract class Node {
     }
 
     public final Graph getGraph() {
-        return graph;
+        return graphLocation.getGraph();
+    }
+
+    public Point getLocation() {
+        return graphLocation.getLocation();
     }
 
     public final String getProviderId() {
@@ -46,6 +54,16 @@ public abstract class Node {
     }
 
     public abstract void populateConfiguration(Configuration.Builder builder);
+
+    /**
+     * Overridden by nodes wishing to display custom UI for configuring the node.
+     *
+     * @return the configurator, or {@code null} if there is no configurator.
+     */
+    @Nullable
+    public Configurator createConfigurator() {
+        return null;
+    }
 
     public final Configuration getConfiguration() {
         Configuration.Builder builder = Configuration.builder();

@@ -11,8 +11,8 @@ public class KuromojiTokenizerNode extends Node {
 
     private final OutputConnector analyzedTextConnector;
 
-    public KuromojiTokenizerNode(Graph graph, String providerId) {
-        super(graph, providerId, "Kuromoji Tokenizer",
+    public KuromojiTokenizerNode(GraphLocation graphLocation, String providerId) {
+        super(graphLocation, providerId, "Kuromoji Tokenizer",
                 ImmutableList.of(new InputConnector("messages", "Messages", ConnectorType.MESSAGE)),
                 ImmutableList.of(new OutputConnector("analyzedText", "Analyzed Text", ConnectorType.TEXT)));
 

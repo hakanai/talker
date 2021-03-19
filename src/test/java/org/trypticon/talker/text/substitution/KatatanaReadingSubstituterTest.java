@@ -5,6 +5,7 @@ import java.util.Collections;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.trypticon.talker.model.Graph;
+import org.trypticon.talker.model.GraphLocation;
 import org.trypticon.talker.text.Text;
 import org.trypticon.talker.text.Token;
 import org.trypticon.talker.text.TokenType;
@@ -21,7 +22,9 @@ public class KatatanaReadingSubstituterTest {
 
     @BeforeEach
     public void setUp() {
-        substituter = new KatakanaReadingSubstituterNode(new Graph(), "substituter_katakana_reading");
+        substituter = new KatakanaReadingSubstituterNode(
+                new GraphLocation(new Graph(), 0, 0),
+                "substituter_katakana_reading");
     }
 
     @Test

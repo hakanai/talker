@@ -1,7 +1,7 @@
 package org.trypticon.talker.speech.robokoe;
 
 import org.trypticon.talker.config.Configuration;
-import org.trypticon.talker.model.Graph;
+import org.trypticon.talker.model.GraphLocation;
 import org.trypticon.talker.speech.SpeakerNode;
 import org.trypticon.talker.speech.util.ProcessUtils;
 import org.trypticon.talker.text.Text;
@@ -12,8 +12,8 @@ import org.trypticon.talker.text.Text;
 public class RoboKoeSpeakerNode extends SpeakerNode {
     private final String executable;
 
-    public RoboKoeSpeakerNode(Graph graph, String providerId, Configuration configuration) {
-        super(graph, providerId, "Speaker: RoboKoe");
+    public RoboKoeSpeakerNode(GraphLocation graphLocation, String providerId, Configuration configuration) {
+        super(graphLocation, providerId, "Speaker: RoboKoe");
 
         this.executable = configuration.getRequiredString("executable");
     }

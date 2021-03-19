@@ -33,6 +33,8 @@ public class GraphMarshalling {
         for (Node node : graph.getNodes()) {
             nodeConfigurations.add(Configuration.builder()
                     .put("providerId", node.getProviderId())
+                    .put("x", node.getLocation().x)
+                    .put("y", node.getLocation().y)
                     .put("config", node.getConfiguration())
                     .build());
 
@@ -45,8 +47,8 @@ public class GraphMarshalling {
             connectionConfigurations.add(Configuration.builder()
                     .put("fromNode", idsByNode.get(connection.getSource().getParent()))
                     .put("fromConnector", connection.getSource().getId())
-                    .put("toNode", idsByNode.get(connection.getDestination().getParent()))
-                    .put("toConnector", connection.getDestination().getId())
+                    .put("toNode", idsByNode.get(connection.getTarget().getParent()))
+                    .put("toConnector", connection.getTarget().getId())
                     .build());
         }
 
@@ -92,9 +94,12 @@ public class GraphMarshalling {
                 new SubstituterNodeFactory(),
                 new SpeakerNodeFactory());
         String providerId = configuration.getRequiredString("providerId");
+        int x = configuration.getRequiredInt("x");
+        int y = configuration.getRequiredInt("y");
+        GraphLocation graphLocation = new GraphLocation(graph, x, y);
         Configuration innerConfiguration = configuration.getSubSection("config");
         for (NodeFactory factory : nodeFactories) {
-            Node node = factory.create(graph, context, providerId, innerConfiguration);
+            Node node = factory.create(graphLocation, context, providerId, innerConfiguration);
             if (node != null) {
                 return node;
             }
@@ -107,6 +112,7 @@ public class GraphMarshalling {
         OutputConnector sourceConnector = sourceNode.getOutputConnectorById(configuration.getRequiredString("fromConnector"));
         Node targetNode = nodesById.get(configuration.getRequiredInt("toNode"));
         InputConnector targetConnector = targetNode.getInputConnectorById(configuration.getRequiredString("toConnector"));
-        return new Connection(sourceConnector, targetConnector);
+        int cableLength = configuration.getRequiredInt("cableLength");
+        return new Connection(sourceConnector, targetConnector, cableLength);
     }
 }

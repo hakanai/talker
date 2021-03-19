@@ -26,6 +26,7 @@ class TalkerPresenter {
 
         TalkerContext context = new TalkerContext(view);
         graph = GraphMarshalling.loadGraph(context, configuration);
+        context.setCurrentGraph(graph);
     }
 
     public void start() {

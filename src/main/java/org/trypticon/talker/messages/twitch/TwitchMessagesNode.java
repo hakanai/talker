@@ -1,6 +1,7 @@
 package org.trypticon.talker.messages.twitch;
 
-import java.util.*;
+import java.util.List;
+import java.util.Map;
 
 import com.github.twitch4j.TwitchClient;
 import com.github.twitch4j.TwitchClientBuilder;
@@ -24,8 +25,8 @@ public class TwitchMessagesNode extends Node implements Startable {
 
     private TwitchClient client;
 
-    public TwitchMessagesNode(Graph graph, String providerId, Configuration configuration) {
-        super(graph, providerId, "Twitch Chat",
+    public TwitchMessagesNode(GraphLocation graphLocation, String providerId, Configuration configuration) {
+        super(graphLocation, providerId, "Twitch Chat",
                 ImmutableList.of(),
                 ImmutableList.of(new OutputConnector("messages", "Messages", ConnectorType.MESSAGE)));
 

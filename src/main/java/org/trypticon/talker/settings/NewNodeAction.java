@@ -4,11 +4,11 @@ import java.awt.event.ActionEvent;
 import javax.swing.*;
 
 public class NewNodeAction extends AbstractAction {
-    private final SettingsGraph graph;
+    private final GraphView graph;
     private final String name;
     private final org.trypticon.talker.model.NodeFactory nodeFactory;
 
-    public NewNodeAction(SettingsGraph graph, String name, org.trypticon.talker.model.NodeFactory nodeFactory) {
+    public NewNodeAction(GraphView graph, String name, org.trypticon.talker.model.NodeFactory nodeFactory) {
         this.graph = graph;
         this.name = name;
         this.nodeFactory = nodeFactory;

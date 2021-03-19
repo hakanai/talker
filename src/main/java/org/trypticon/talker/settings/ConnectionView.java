@@ -1,6 +1,7 @@
 package org.trypticon.talker.settings;
 
 import java.awt.*;
+import javax.swing.*;
 import javax.swing.event.AncestorEvent;
 
 import org.trypticon.talker.swing.AncestorAdapter;
@@ -10,15 +11,15 @@ import org.trypticon.talker.util.Colors;
  * A connection between two connectors.
  */
 public class ConnectionView {
-    private final SettingsGraph graph;
-    private final ConnectorView source;
-    private final ConnectorView target;
+    private final GraphView graph;
+    private final OutputConnectorView source;
+    private final InputConnectorView target;
     private double cableLength;
     private final BasicStroke stroke;
     private final Paint paint;
     private final Catenary catenary;
 
-    public ConnectionView(SettingsGraph graph, ConnectorView source, ConnectorView target, double cableLength) {
+    public ConnectionView(GraphView graph, OutputConnectorView source, InputConnectorView target, double cableLength) {
         this.graph = graph;
         this.source = source;
         this.target = target;
@@ -36,16 +37,16 @@ public class ConnectionView {
         source.addAncestorListener(ancestorListener);
         target.addAncestorListener(ancestorListener);
 
-        stroke = new BasicStroke(source.getWidth(), BasicStroke.CAP_ROUND, BasicStroke.JOIN_ROUND);
+        stroke = new BasicStroke(source.getPreferredSize().width, BasicStroke.CAP_ROUND, BasicStroke.JOIN_ROUND);
         paint = Colors.desaturate(source.getBackground());
         catenary = new Catenary();
     }
 
-    public ConnectorView getSource() {
+    public OutputConnectorView getSource() {
         return source;
     }
 
-    public ConnectorView getTarget() {
+    public InputConnectorView getTarget() {
         return target;
     }
 
@@ -58,15 +59,8 @@ public class ConnectionView {
     }
 
     private void updateCatenary() {
-        Point graphLocation = graph.getLocationOnScreen();
-
-        Point start = source.getLocationOnScreen();
-        start.translate(source.getWidth() / 2, source.getHeight() / 2);
-        start.translate(-graphLocation.x, -graphLocation.y);
-        Point end = target.getLocationOnScreen();
-        end.translate(target.getWidth() / 2, target.getHeight() / 2);
-        end.translate(-graphLocation.x, -graphLocation.y);
-
+        Point start = SwingUtilities.convertPoint(source, source.getWidth() / 2, source.getHeight() / 2, graph);
+        Point end = SwingUtilities.convertPoint(target, target.getWidth() / 2, target.getHeight() / 2, graph);
         catenary.update(start, end, cableLength);
     }
 

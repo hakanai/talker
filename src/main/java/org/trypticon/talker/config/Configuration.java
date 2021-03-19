@@ -10,6 +10,7 @@ import java.util.List;
 import java.util.Optional;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import javax.annotation.concurrent.Immutable;
 
 import com.google.gson.*;
 
@@ -17,7 +18,8 @@ import com.google.gson.*;
  * Configuration holder. _Essentially_ treated as immutable, though what it
  * _contains_ is currently not.
  */
-public class Configuration {
+@Immutable
+public final class Configuration {
     private final JsonObject configObject;
 
     private Configuration(JsonObject configObject) {
@@ -172,7 +174,7 @@ public class Configuration {
     /**
      * Builder for building configuration objects.
      */
-    public static class Builder {
+    public static final class Builder {
         private final JsonObject configObject = new JsonObject();
 
         private Builder() {

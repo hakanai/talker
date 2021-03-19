@@ -11,11 +11,11 @@ import org.trypticon.talker.TalkerView;
 import org.trypticon.talker.config.Configuration;
 import org.trypticon.talker.messages.Message;
 import org.trypticon.talker.model.ConnectorType;
-import org.trypticon.talker.model.Graph;
+import org.trypticon.talker.model.GraphLocation;
 import org.trypticon.talker.model.InputConnector;
 import org.trypticon.talker.model.Node;
 
-public class RenderMessageNode extends Node {
+public class RenderMessagesNode extends Node {
     private final TalkerView view;
 
     private final DateTimeFormatter dateFormatter;
@@ -23,8 +23,8 @@ public class RenderMessageNode extends Node {
 
     private String lastDayDivider;
 
-    public RenderMessageNode(Graph graph, String providerId, TalkerView view) {
-        super(graph, providerId, "Render Messages",
+    public RenderMessagesNode(GraphLocation graphLocation, String providerId, TalkerView view) {
+        super(graphLocation, providerId, "Render Messages",
                 ImmutableList.of(new InputConnector("messages", "Messages", ConnectorType.MESSAGE)),
                 ImmutableList.of());
 

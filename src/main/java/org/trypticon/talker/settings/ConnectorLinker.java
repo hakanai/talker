@@ -2,7 +2,7 @@ package org.trypticon.talker.settings;
 
 import java.awt.*;
 import java.awt.event.MouseEvent;
-
+import javax.annotation.Nullable;
 import javax.swing.*;
 
 import org.trypticon.talker.swing.ComponentMover;
@@ -11,9 +11,9 @@ public class ConnectorLinker extends ComponentMover {
     public static final ConnectorLinker INSTANCE = new ConnectorLinker();
 
     private NodeView sourceNode;
-    private ConnectorView sourceConnector;
+    private OutputConnectorView sourceConnector;
     private ConnectionView ephemeralConnection;
-    private ConnectorView overConnector;
+    private InputConnectorView overConnector;
 
     private double distanceDrawnSoFar;
     private Point lastLocation;
@@ -23,21 +23,43 @@ public class ConnectorLinker extends ComponentMover {
 
     @Override
     public void mouseEntered(MouseEvent event) {
-        overConnector = (ConnectorView) event.getSource();
-        System.out.println("overConnector now " + overConnector);
+        Object source = event.getSource();
+        if (source instanceof InputConnectorView) {
+            overConnector = (InputConnectorView) source;
+            System.out.println("overConnector now " + overConnector);
+        }
     }
 
     @Override
     public void mouseExited(MouseEvent event) {
         overConnector = null;
-        System.out.println("overConnector now null");
     }
 
+    @Nullable
     @Override
     protected Component getDraggedComponent(Component source) {
-        sourceConnector = (ConnectorView) source;
+        InputConnectorView draggedClone;
+        if (source instanceof InputConnectorView) {
+            ConnectionView existingConnection = ((InputConnectorView) source).getConnection();
+            if (existingConnection == null) {
+                // User is tugging at an input connector with no connection on it. Why?
+                return null;
+            }
+
+            // User is pulling out a cable at an input connector.
+            // They might plug it in somewhere else, or they might just let it go.
+
+            sourceConnector = existingConnection.getSource();
+            draggedClone = ((InputConnectorView) source).detachForDrag();
+
+        } else if (source instanceof OutputConnectorView) {
+            sourceConnector = (OutputConnectorView) source;
+            draggedClone = sourceConnector.createCloneForDrag();
+        } else {
+            return null;
+        }
+
         sourceNode = (NodeView) SwingUtilities.getAncestorOfClass(NodeView.class, source);
-        ConnectorView draggedClone = sourceConnector.createCloneForDrag();
 
         distanceDrawnSoFar = 1.0;
         ephemeralConnection = sourceConnector.connectTo(draggedClone, distanceDrawnSoFar);
@@ -55,8 +77,7 @@ public class ConnectorLinker extends ComponentMover {
         if (sourceConnector != null && overConnector != null &&
                 sourceConnector.canConnectTo(overConnector)) {
 
-            // TODO: Indicate this somehow
-            System.out.println("currently over a valid target");
+            // TODO: Indicate somehow that we're over a valid target
         }
     }
 
@@ -77,10 +98,8 @@ public class ConnectorLinker extends ComponentMover {
         repaintBounds.height += distanceDrawnSoFar;
         dragPanel.repaint(repaintBounds.x, repaintBounds.y, repaintBounds.width, repaintBounds.height);
 
-        if (sourceConnector != null && overConnector != null &&
-                sourceConnector.canConnectTo(overConnector)) {
-
-            sourceConnector.connectTo(overConnector, distanceDrawnSoFar);
+        if (sourceConnector != null && overConnector != null) {
+            sourceConnector.tryToConnectTo(overConnector, distanceDrawnSoFar);
         }
     }
 }

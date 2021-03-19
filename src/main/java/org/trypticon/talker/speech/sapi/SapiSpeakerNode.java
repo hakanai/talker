@@ -7,7 +7,7 @@ import java.util.Collections;
 
 import com.google.common.base.Strings;
 import org.trypticon.talker.config.Configuration;
-import org.trypticon.talker.model.Graph;
+import org.trypticon.talker.model.GraphLocation;
 import org.trypticon.talker.speech.SpeakerNode;
 import org.trypticon.talker.speech.util.ProcessUtils;
 import org.trypticon.talker.text.Text;
@@ -21,8 +21,8 @@ public class SapiSpeakerNode extends SpeakerNode {
     private final int rate;
     private final boolean force32Bit;
 
-    public SapiSpeakerNode(Graph graph, String providerId, Configuration configuration) {
-        super(graph, providerId, "Speaker: SAPI");
+    public SapiSpeakerNode(GraphLocation graphLocation, String providerId, Configuration configuration) {
+        super(graphLocation, providerId, "Speaker: SAPI");
 
         voice = configuration.getOptionalString("voice").orElse(null);
         rate = configuration.getOptionalInt("rate").orElse(0);

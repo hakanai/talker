@@ -2,33 +2,40 @@ package org.trypticon.talker.settings;
 
 import java.awt.*;
 import java.util.List;
+import java.util.stream.Collectors;
 import javax.swing.*;
 
-import com.google.common.collect.ImmutableList;
+import org.trypticon.talker.model.Node;
 import org.trypticon.talker.swing.ComponentMover;
 
 public class NodeView extends JPanel {
-    private final SettingsGraph graph;
+    private final GraphView graph;
     private final JLabel titleLabel;
     private final JPanel inputConnectorsPanel = createInputConnectorsPanel();
     private final JPanel mainPanel = createMainPanel();
     private final JPanel outputConnectorsPanel = createOutputConnectorsPanel();
-    private final List<ConnectorView> inputConnectors;
-    private final List<ConnectorView> outputConnectors;
+    private final List<InputConnectorView> inputConnectors;
+    private final List<OutputConnectorView> outputConnectors;
 
-    public NodeView(SettingsGraph graph, String title, Point initialLocation, List<ConnectorView> inputConnectors, List<ConnectorView> outputConnectors) {
-        this.graph = graph;
-        setLocation(initialLocation);
+    public NodeView(GraphView graphView, Node node) {
+        this.graph = graphView;
+
+        setLocation(node.getLocation());
         setBorder(BorderFactory.createLineBorder(Color.BLACK));
         setLayout(new BorderLayout());
-        titleLabel = new TitleLabel(title);
+        titleLabel = new TitleLabel(node.getName());
+
         add(titleLabel, BorderLayout.PAGE_START);
         add(inputConnectorsPanel, BorderLayout.LINE_START);
         add(mainPanel, BorderLayout.CENTER);
         add(outputConnectorsPanel, BorderLayout.LINE_END);
 
-        this.inputConnectors = ImmutableList.copyOf(inputConnectors);
-        this.outputConnectors = ImmutableList.copyOf(outputConnectors);
+        this.inputConnectors = node.getInputConnectors().stream()
+                .map(c -> new InputConnectorView(graphView, c))
+                .collect(Collectors.toUnmodifiableList());
+        this.outputConnectors = node.getOutputConnectors().stream()
+                .map(c -> new OutputConnectorView(graphView, c))
+                .collect(Collectors.toUnmodifiableList());
 
         inputConnectors.forEach(inputConnectorsPanel::add);
         outputConnectors.forEach(outputConnectorsPanel::add);
@@ -39,11 +46,11 @@ public class NodeView extends JPanel {
         outputConnectors.forEach(c -> c.addMouseListener(ConnectorLinker.INSTANCE));
     }
 
-    public List<ConnectorView> getInputConnectors() {
+    public List<InputConnectorView> getInputConnectors() {
         return inputConnectors;
     }
 
-    public List<ConnectorView> getOutputConnectors() {
+    public List<OutputConnectorView> getOutputConnectors() {
         return outputConnectors;
     }
 

@@ -3,7 +3,7 @@ package org.trypticon.talker.text.substitution;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import org.trypticon.talker.model.Graph;
+import org.trypticon.talker.model.GraphLocation;
 import org.trypticon.talker.text.Text;
 import org.trypticon.talker.text.Token;
 
@@ -11,8 +11,8 @@ import org.trypticon.talker.text.Token;
  * A substituter which works by substituting each token in turn.
  */
 public abstract class TokenByTokenSubstituterNode extends SubstituterNode {
-    protected TokenByTokenSubstituterNode(Graph graph, String providerId, String name) {
-        super(graph, providerId, name);
+    protected TokenByTokenSubstituterNode(GraphLocation graphLocation, String providerId, String name) {
+        super(graphLocation, providerId, name);
     }
 
     @Override
