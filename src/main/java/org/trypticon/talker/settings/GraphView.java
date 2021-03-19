@@ -22,7 +22,7 @@ public class GraphView extends JComponent {
     private Graph graph;
 
     public GraphView() {
-        setLayout(new DragLayout(false));
+        setLayout(new DragLayout());
 
         addContainerListener(new ContainerAdapter() {
             @Override
@@ -63,6 +63,8 @@ public class GraphView extends JComponent {
             int cableLength = connection.getCableLength();
             add(new ConnectionView(this, source, target, cableLength));
         });
+
+        validate();
     }
 
     public Graph getGraph() {

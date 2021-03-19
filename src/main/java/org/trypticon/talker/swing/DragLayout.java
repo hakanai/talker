@@ -20,26 +20,6 @@ import java.awt.*;
  *  will be adjusted by the same amount.
  */
 public class DragLayout implements LayoutManager {
-    private final boolean usePreferredSize;
-
-    /**
-     * Create a DragLayout and indicate how the component size is determined.
-     *
-     * @param usePreferredSize size see setPreferredSize() for values.
-     */
-    public DragLayout(boolean usePreferredSize) {
-        this.usePreferredSize = usePreferredSize;
-    }
-
-    /**
-     * Get the use Preferred Size property
-     *
-     * @return the use preferred size property
-     */
-    public boolean isUsePreferredSize() {
-        return usePreferredSize;
-    }
-
     @Override
     public void addLayoutComponent(String name, Component component) {}
 
@@ -97,10 +77,6 @@ public class DragLayout implements LayoutManager {
     }
 
     private Dimension getActualSize(Component component, Dimension reusedDimension) {
-        if (usePreferredSize) {
-            component.getPreferredSize();
-        }
-
         // Use the preferred size as a default when a size has not been set.
         Dimension d = component.getSize(reusedDimension);
         if (d.width == 0 || d.height == 0) {
