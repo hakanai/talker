@@ -19,8 +19,26 @@ public class GraphView extends JComponent {
 
     private final List<ConnectionView> connections = new ArrayList<>();
 
-    public GraphView(Graph graph) {
+    private Graph graph;
+
+    public GraphView() {
         setLayout(new DragLayout(false));
+
+        addContainerListener(new ContainerAdapter() {
+            @Override
+            public void componentRemoved(ContainerEvent event) {
+                Component child = event.getChild();
+                if (child instanceof AbstractConnectorView<?>) {
+                    removeAll(getConnectionsTo((AbstractConnectorView<?>) child)
+                            .collect(Collectors.toUnmodifiableList()));
+                }
+            }
+        });
+    }
+
+    private void initViewFromGraph() {
+        removeAll();
+        connections.clear();
 
         // Keeping track of the connectors as we add the nodes so that we can look them
         // up as we add the connections.
@@ -45,17 +63,15 @@ public class GraphView extends JComponent {
             int cableLength = connection.getCableLength();
             add(new ConnectionView(this, source, target, cableLength));
         });
+    }
 
-        addContainerListener(new ContainerAdapter() {
-            @Override
-            public void componentRemoved(ContainerEvent event) {
-                Component child = event.getChild();
-                if (child instanceof AbstractConnectorView<?>) {
-                    removeAll(getConnectionsTo((AbstractConnectorView<?>) child)
-                            .collect(Collectors.toUnmodifiableList()));
-                }
-            }
-        });
+    public Graph getGraph() {
+        return graph;
+    }
+
+    public void setGraph(Graph graph) {
+        this.graph = graph;
+        initViewFromGraph();
     }
 
     public void add(ConnectionView connection) {

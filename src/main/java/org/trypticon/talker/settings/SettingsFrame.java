@@ -30,7 +30,8 @@ public class SettingsFrame extends JFrame {
         TalkerContext context = new TalkerContext(null);
         Graph graph = GraphMarshalling.loadGraph(context, configuration);
 
-        GraphView graphView = new GraphView(graph);
+        GraphView graphView = new GraphView();
+        graphView.setGraph(graph);
         add(graphView, BorderLayout.CENTER);
     }
 }
