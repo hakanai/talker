@@ -3,6 +3,7 @@ package org.trypticon.talker.swing;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import javax.annotation.Nullable;
 import javax.swing.*;
 
 /**
@@ -185,6 +186,9 @@ public class ComponentMover extends MouseAdapter {
         potentialDrag = true;
 
         destination = getDraggedComponent(source);
+        if (destination == null) {
+            return;
+        }
 
         pressed = event.getLocationOnScreen();
         location = destination.getLocation();
@@ -210,6 +214,10 @@ public class ComponentMover extends MouseAdapter {
      */
     @Override
     public void mouseDragged(MouseEvent event) {
+        if (destination == null) {
+            return;
+        }
+
         Point dragged = event.getLocationOnScreen();
         int dragX = getDragDistance(dragged.x, pressed.x, snapSize.width);
         int dragY = getDragDistance(dragged.y, pressed.y, snapSize.height);
@@ -300,6 +308,7 @@ public class ComponentMover extends MouseAdapter {
         }
     }
 
+    @Nullable
     protected Component getDraggedComponent(Component source) {
         return source;
     }
