@@ -19,7 +19,7 @@ import org.trypticon.talker.text.TokenType;
 public class KatakanaReadingSubstituterNode extends SubstituterNode implements Substituter {
     private final KatakanaGenerator katakana = new KatakanaGenerator();
 
-    KatakanaReadingSubstituterNode(GraphLocation graphLocation, String providerId) {
+    public KatakanaReadingSubstituterNode(GraphLocation graphLocation, String providerId) {
         super(graphLocation, providerId, "Substitute: Katakana Readings");
     }
 

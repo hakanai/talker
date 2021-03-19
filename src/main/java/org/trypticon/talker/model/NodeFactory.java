@@ -8,7 +8,6 @@ import org.trypticon.talker.config.Configuration;
 /**
  * Interface to create nodes.
  */
-@FunctionalInterface
 public interface NodeFactory {
 
     /**

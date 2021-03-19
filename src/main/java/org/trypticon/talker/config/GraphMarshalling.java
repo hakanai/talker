@@ -6,12 +6,8 @@ import java.util.Map;
 
 import com.google.common.collect.ImmutableList;
 import org.trypticon.talker.TalkerContext;
-import org.trypticon.talker.messages.MessageStreamNodeFactory;
+import org.trypticon.talker.factory.CoreNodeFactory;
 import org.trypticon.talker.model.*;
-import org.trypticon.talker.rendering.RenderingNodeFactory;
-import org.trypticon.talker.speech.SpeakerNodeFactory;
-import org.trypticon.talker.text.substitution.SubstituterNodeFactory;
-import org.trypticon.talker.text.tokenisation.TokenizerNodeFactory;
 
 /**
  * Utility to load and save graphs in the top-level configuration file.
@@ -87,22 +83,15 @@ public class GraphMarshalling {
     }
 
     private static Node loadNode(Graph graph, TalkerContext context, Configuration configuration) {
-        ImmutableList<NodeFactory> nodeFactories = ImmutableList.of(
-                new MessageStreamNodeFactory(),
-                new RenderingNodeFactory(),
-                new TokenizerNodeFactory(),
-                new SubstituterNodeFactory(),
-                new SpeakerNodeFactory());
+        NodeFactory factory = new CoreNodeFactory();
         String providerId = configuration.getRequiredString("providerId");
         int x = configuration.getRequiredInt("x");
         int y = configuration.getRequiredInt("y");
         GraphLocation graphLocation = new GraphLocation(graph, x, y);
         Configuration innerConfiguration = configuration.getSubSection("config");
-        for (NodeFactory factory : nodeFactories) {
-            Node node = factory.create(graphLocation, context, providerId, innerConfiguration);
-            if (node != null) {
-                return node;
-            }
+        Node node = factory.create(graphLocation, context, providerId, innerConfiguration);
+        if (node != null) {
+            return node;
         }
         throw new IllegalStateException("Unknown node provider: " + providerId);
     }
