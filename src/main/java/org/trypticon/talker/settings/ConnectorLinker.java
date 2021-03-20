@@ -11,7 +11,6 @@ import org.trypticon.talker.swing.ComponentMover;
 public class ConnectorLinker extends ComponentMover {
     public static final ConnectorLinker INSTANCE = new ConnectorLinker();
 
-    private NodeView sourceNode;
     private OutputConnectorView sourceConnector;
     private ConnectionView ephemeralConnection;
     private InputConnectorView overConnector;
@@ -70,8 +69,6 @@ public class ConnectorLinker extends ComponentMover {
             return null;
         }
 
-        sourceNode = (NodeView) SwingUtilities.getAncestorOfClass(NodeView.class, source);
-
         ephemeralConnection = sourceConnector.connectTo(draggedClone, distanceDrawnSoFar);
         lastLocation = draggedClone.getLocation();
 
@@ -115,7 +112,9 @@ public class ConnectorLinker extends ComponentMover {
 
         // Repaint region is the union rectangle of the source plus the destination,
         // extended downwards enough to encompass the entire cable.
-        Rectangle repaintBounds = sourceNode.getBounds();
+        Rectangle repaintBounds = sourceConnector.getBounds();
+        repaintBounds = SwingUtilities.convertRectangle(sourceConnector.getParent(),
+                repaintBounds, draggedClone.getParent());
         repaintBounds.add(draggedClone.getBounds());
 
         // This is an upper bound. I don't know if there is a way to determine a more conservative value.
