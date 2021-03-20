@@ -58,7 +58,7 @@ abstract class AbstractConnectorView<C extends Connector> extends JPanel {
         Point graphLocation = graphView.getLocationOnScreen();
         Point ourLocation = getLocationOnScreen();
         Rectangle cloneBounds = getBounds();
-        cloneBounds.translate(ourLocation.x - graphLocation.x, ourLocation.y - graphLocation.y);
+        cloneBounds.setLocation(ourLocation.x - graphLocation.x, ourLocation.y - graphLocation.y);
         clone.setBounds(cloneBounds);
 
         return clone;
