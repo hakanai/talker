@@ -2,6 +2,7 @@ package org.trypticon.talker.settings;
 
 import java.awt.*;
 import java.awt.event.MouseEvent;
+import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import javax.swing.*;
 
@@ -16,6 +17,7 @@ public class ConnectorLinker extends ComponentMover {
     private InputConnectorView overConnector;
 
     private double distanceDrawnSoFar;
+    private boolean shouldExtend;
     private Point lastLocation;
 
     private ConnectorLinker() {
@@ -26,7 +28,6 @@ public class ConnectorLinker extends ComponentMover {
         Object source = event.getSource();
         if (source instanceof InputConnectorView) {
             overConnector = (InputConnectorView) source;
-            System.out.println("overConnector now " + overConnector);
         }
     }
 
@@ -37,7 +38,7 @@ public class ConnectorLinker extends ComponentMover {
 
     @Nullable
     @Override
-    protected Component getDraggedComponent(Component source) {
+    protected Component getDraggedComponent(@Nonnull Component source) {
         InputConnectorView draggedClone;
         if (source instanceof InputConnectorView) {
             ConnectionView existingConnection = ((InputConnectorView) source).getConnection();
@@ -49,28 +50,44 @@ public class ConnectorLinker extends ComponentMover {
             // User is pulling out a cable at an input connector.
             // They might plug it in somewhere else, or they might just let it go.
 
+            overConnector = (InputConnectorView) source;
             sourceConnector = existingConnection.getSource();
             draggedClone = ((InputConnectorView) source).detachForDrag();
+            distanceDrawnSoFar = existingConnection.getCableLength();
+            shouldExtend = false;
 
         } else if (source instanceof OutputConnectorView) {
             sourceConnector = (OutputConnectorView) source;
             draggedClone = sourceConnector.createCloneForDrag();
+            distanceDrawnSoFar = 1.0;
+            shouldExtend = true;
+
         } else {
+            return null;
+        }
+
+        if (draggedClone == null) {
             return null;
         }
 
         sourceNode = (NodeView) SwingUtilities.getAncestorOfClass(NodeView.class, source);
 
-        distanceDrawnSoFar = 1.0;
         ephemeralConnection = sourceConnector.connectTo(draggedClone, distanceDrawnSoFar);
         lastLocation = draggedClone.getLocation();
+
+        repaintConnection(draggedClone);
+
         return draggedClone;
     }
 
     @Override
-    protected void handleDraggedComponent(Component draggedClone) {
+    protected void handleDraggedComponent(@Nonnull Component draggedClone) {
+        repaintConnection(draggedClone);
+
         Point newLocation = draggedClone.getLocation();
-        distanceDrawnSoFar += lastLocation.distance(newLocation);
+        if (shouldExtend) {
+            distanceDrawnSoFar += lastLocation.distance(newLocation);
+        }
         ephemeralConnection.setCableLength(distanceDrawnSoFar);
         lastLocation = newLocation;
 
@@ -82,24 +99,28 @@ public class ConnectorLinker extends ComponentMover {
     }
 
     @Override
-    protected void handleDroppedComponent(Component draggedClone) {
-        // This call is here instead of closer to the scope it's used because it might
-        // become undefined once you remove it from the panel.
-        Rectangle oldBounds = draggedClone.getBounds();
+    protected void handleDroppedComponent(@Nonnull Component draggedClone) {
+        repaintConnection(draggedClone);
 
-        // You'd think Swing would repaint the component when a child is removed, but nope.
         Container dragPanel = draggedClone.getParent();
         dragPanel.remove(draggedClone);
-
-        // Repaint region is the union rectangle of the source plus the destination,
-        // extended downwards enough to encompass the entire cable.
-        Rectangle repaintBounds = sourceNode.getBounds();
-        repaintBounds.add(oldBounds);
-        repaintBounds.height += distanceDrawnSoFar;
-        dragPanel.repaint(repaintBounds.x, repaintBounds.y, repaintBounds.width, repaintBounds.height);
 
         if (sourceConnector != null && overConnector != null) {
             sourceConnector.tryToConnectTo(overConnector, distanceDrawnSoFar);
         }
+    }
+
+    private void repaintConnection(@Nonnull Component draggedClone) {
+        Container dragPanel = draggedClone.getParent();
+
+        // Repaint region is the union rectangle of the source plus the destination,
+        // extended downwards enough to encompass the entire cable.
+        Rectangle repaintBounds = sourceNode.getBounds();
+        repaintBounds.add(draggedClone.getBounds());
+
+        // This is an upper bound. I don't know if there is a way to determine a more conservative value.
+        repaintBounds.height += distanceDrawnSoFar;
+
+        dragPanel.repaint(repaintBounds.x, repaintBounds.y, repaintBounds.width, repaintBounds.height);
     }
 }

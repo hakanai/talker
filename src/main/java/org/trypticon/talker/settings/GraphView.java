@@ -1,10 +1,12 @@
 package org.trypticon.talker.settings;
 
 import java.awt.*;
+import java.awt.event.ComponentAdapter;
+import java.awt.event.ComponentEvent;
 import java.awt.event.ContainerAdapter;
 import java.awt.event.ContainerEvent;
-import java.util.*;
 import java.util.List;
+import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import javax.swing.*;
@@ -52,6 +54,15 @@ public class GraphView extends JComponent {
             for (OutputConnectorView connectorView : nodeView.getOutputConnectors()) {
                 viewsByConnector.put(connectorView.getConnector(), connectorView);
             }
+
+            // Bind the node view position back to the model.
+            nodeView.addComponentListener(new ComponentAdapter() {
+                @Override
+                public void componentMoved(ComponentEvent event) {
+                    node.setLocation(nodeView.getX(), nodeView.getY());
+                }
+            });
+
             add(nodeView);
         });
 
@@ -64,7 +75,17 @@ public class GraphView extends JComponent {
             add(new ConnectionView(this, source, target, cableLength));
         });
 
-        validate();
+        revalidate();
+    }
+
+    public void loadGraphFromFile() {
+        new LoadGraphWorker()
+                .whenDone(this::setGraph)
+                .execute();
+    }
+
+    public void saveGraphToFile() {
+        new SaveGraphWorker(graph).execute();
     }
 
     public Graph getGraph() {

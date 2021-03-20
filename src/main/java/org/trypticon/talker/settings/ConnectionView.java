@@ -14,10 +14,11 @@ public class ConnectionView {
     private final GraphView graph;
     private final OutputConnectorView source;
     private final InputConnectorView target;
-    private double cableLength;
     private final BasicStroke stroke;
     private final Paint paint;
     private final Catenary catenary;
+
+    private double cableLength;
 
     public ConnectionView(GraphView graph, OutputConnectorView source, InputConnectorView target, double cableLength) {
         this.graph = graph;

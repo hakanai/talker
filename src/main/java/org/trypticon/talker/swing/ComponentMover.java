@@ -3,6 +3,7 @@ package org.trypticon.talker.swing;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import javax.swing.*;
 
@@ -268,11 +269,11 @@ public class ComponentMover extends MouseAdapter {
     /**
      * Gets the bounds of the parent of the dragged component.
      */
-    private Dimension getBoundingSize(Component source) {
+    private Dimension getBoundingSize(@Nonnull Component source) {
         if (source instanceof Window) {
             return GraphicsEnvironment.getLocalGraphicsEnvironment().getMaximumWindowBounds().getSize();
         } else {
-            return source.getParent().getSize();
+            return getBoundingSize(SwingUtilities.getWindowAncestor(source));
         }
     }
 
@@ -298,13 +299,9 @@ public class ComponentMover extends MouseAdapter {
             ((JComponent) destination).setAutoscrolls(autoscrolls);
         }
 
-        //  Layout the components on the parent container
+        // Layout the components on the parent container
         if (autoLayout) {
-            if (destination instanceof JComponent) {
-                destination.revalidate();
-            } else {
-                destination.validate();
-            }
+            destination.revalidate();
         }
     }
 

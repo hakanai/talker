@@ -40,13 +40,16 @@ public class InputConnectorView extends AbstractConnectorView<InputConnector> {
      *
      * @return the draggable connector.
      */
+    @Nullable
     public final InputConnectorView detachForDrag() {
         GraphView graphView = getGraphView();
 
         ConnectionView connection = getConnection();
-        if (connection != null) {
-            graphView.remove(connection);
+        if (connection == null) {
+            return null;
         }
+
+        graphView.remove(connection);
 
         return createCloneForDrag();
     }

@@ -1,6 +1,5 @@
 package org.trypticon.talker.model;
 
-import java.awt.*;
 import javax.annotation.Nullable;
 
 import com.google.common.collect.ImmutableList;
@@ -41,8 +40,16 @@ public abstract class Node {
         return graphLocation.getGraph();
     }
 
-    public Point getLocation() {
-        return graphLocation.getLocation();
+    public int getX() {
+        return graphLocation.getX();
+    }
+
+    public int getY() {
+        return graphLocation.getY();
+    }
+
+    public void setLocation(int x, int y) {
+        graphLocation.setLocation(x, y);
     }
 
     public final String getProviderId() {

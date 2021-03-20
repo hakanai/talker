@@ -13,11 +13,21 @@ public class SettingsFrame extends JFrame {
         add(toolBar, BorderLayout.LINE_START);
 
         GraphView graphView = new GraphView();
-
-        new LoadGraphWorker()
-                .whenDone(graphView::setGraph)
-                .execute();
+        graphView.loadGraphFromFile();
 
         add(graphView, BorderLayout.CENTER);
+
+        setJMenuBar(buildMenuBar(graphView));
+    }
+
+    private JMenuBar buildMenuBar(GraphView graphView) {
+        JMenuBar menuBar = new JMenuBar();
+
+        JMenu fileMenu = new JMenu("File"); // TODO: Localisation
+        fileMenu.add(new RevertGraphAction(graphView));
+        fileMenu.add(new SaveGraphAction(graphView));
+        menuBar.add(fileMenu);
+
+        return menuBar;
     }
 }

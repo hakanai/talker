@@ -20,7 +20,7 @@ public class NodeView extends JPanel {
     public NodeView(GraphView graphView, Node node) {
         this.graph = graphView;
 
-        setLocation(node.getLocation());
+        setLocation(node.getX(), node.getY());
         setBorder(BorderFactory.createLineBorder(Color.BLACK));
         setLayout(new BorderLayout());
         titleLabel = new TitleLabel(node.getName());

@@ -4,8 +4,8 @@ import java.awt.*;
 
 public class GraphLocation {
     private final Graph graph;
-    private final int x;
-    private final int y;
+    private int x;
+    private int y;
 
     public GraphLocation(Graph graph, Point location) {
         this(graph, location.x, location.y);
@@ -21,7 +21,16 @@ public class GraphLocation {
         return graph;
     }
 
-    public Point getLocation() {
-        return new Point(x, y);
+    public int getX() {
+        return x;
+    }
+
+    public int getY() {
+        return y;
+    }
+
+    public void setLocation(int x, int y) {
+        this.x = x;
+        this.y = y;
     }
 }
