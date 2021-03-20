@@ -41,6 +41,7 @@ public class ConnectionView {
         Color c = source.getBackground();
         paint = new Color(c.getRed(), c.getGreen(), c.getBlue(), 128);
         catenary = new Catenary();
+        updateCatenary();
     }
 
     public OutputConnectorView getSource() {
