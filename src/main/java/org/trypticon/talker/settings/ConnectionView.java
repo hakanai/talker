@@ -5,7 +5,6 @@ import javax.swing.*;
 import javax.swing.event.AncestorEvent;
 
 import org.trypticon.talker.swing.AncestorAdapter;
-import org.trypticon.talker.util.Colors;
 
 /**
  * A connection between two connectors.
@@ -39,7 +38,8 @@ public class ConnectionView {
         target.addAncestorListener(ancestorListener);
 
         stroke = new BasicStroke(source.getPreferredSize().width, BasicStroke.CAP_ROUND, BasicStroke.JOIN_ROUND);
-        paint = Colors.desaturate(source.getBackground());
+        Color c = source.getBackground();
+        paint = new Color(c.getRed(), c.getGreen(), c.getBlue(), 128);
         catenary = new Catenary();
     }
 
@@ -70,11 +70,10 @@ public class ConnectionView {
      *
      * @param g the graphics context for the entire graph.
      */
-    protected void paintUnder(Graphics g) {
-        Graphics2D g2d = (Graphics2D) g;
-        g2d.setStroke(stroke);
-        g2d.setPaint(paint);
-        catenary.drawToCanvas(g2d);
+    protected void paintUnder(Graphics2D g) {
+        g.setStroke(stroke);
+        g.setPaint(paint);
+        catenary.drawToCanvas(g);
     }
 
     // TODO: paintOver I think requires me to customise SettingsGraph.paint IIRC ? Dig.
@@ -87,4 +86,5 @@ public class ConnectionView {
 //        g2d.setStroke(new BasicStroke(4, BasicStroke.CAP_ROUND, BasicStroke.JOIN_ROUND));
 //        g2d.drawLine(start.x, start.y, end.x, end.y);
 //    }
+
 }

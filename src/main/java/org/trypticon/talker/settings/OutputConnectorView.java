@@ -1,6 +1,5 @@
 package org.trypticon.talker.settings;
 
-import org.trypticon.talker.model.Connector;
 import org.trypticon.talker.model.OutputConnector;
 
 public class OutputConnectorView extends AbstractConnectorView<OutputConnector> {
@@ -42,11 +41,6 @@ public class OutputConnectorView extends AbstractConnectorView<OutputConnector> 
         } else {
             return false;
         }
-    }
-
-    @Override
-    protected AbstractConnectorView<OutputConnector> createCloneForDragInner(GraphView graphView, Connector connector) {
-        return new OutputConnectorView(graphView, (OutputConnector) connector);
     }
 
 }

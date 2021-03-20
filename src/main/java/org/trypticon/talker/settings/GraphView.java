@@ -5,6 +5,8 @@ import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
 import java.awt.event.ContainerAdapter;
 import java.awt.event.ContainerEvent;
+import java.awt.geom.Rectangle2D;
+import java.awt.image.BufferedImage;
 import java.util.List;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -20,6 +22,9 @@ import org.trypticon.talker.swing.DragLayout;
 public class GraphView extends JComponent {
 
     private final List<ConnectionView> connections = new ArrayList<>();
+
+    private final Paint background = new TexturePaint(
+            createGridTexture(), new Rectangle2D.Float(0.0f, 0.0f, 24.0f, 24.0f));
 
     private Graph graph;
 
@@ -123,10 +128,30 @@ public class GraphView extends JComponent {
 
         // TODO: Paint background pattern here
 
+        Graphics2D g2d = (Graphics2D) g;
+        g2d.setPaint(background);
+        g2d.fillRect(0, 0, getWidth(), getHeight());
+
         for (ConnectionView connection : connections) {
-            connection.paintUnder(g);
+            connection.paintUnder(g2d);
         }
 
         // Nodes themselves are child components so they will be painted for us.
+    }
+
+    private static BufferedImage createGridTexture() {
+        BufferedImage image = new BufferedImage(24, 24, BufferedImage.TYPE_4BYTE_ABGR);
+        Graphics2D g = image.createGraphics();
+        try {
+            g.setColor(new Color(0, 10, 10));
+            g.fillRect(0, 0, 24, 24);
+            g.setColor(new Color(0, 20, 20));
+            g.setStroke(new BasicStroke(2.0f));
+            g.drawLine(12, -2, 12, 26);
+            g.drawLine(-2, 12, 26, 12);
+        } finally {
+            g.dispose();
+        }
+        return image;
     }
 }

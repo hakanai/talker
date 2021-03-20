@@ -2,17 +2,11 @@ package org.trypticon.talker.settings;
 
 import javax.annotation.Nullable;
 
-import org.trypticon.talker.model.Connector;
 import org.trypticon.talker.model.InputConnector;
 
 public class InputConnectorView extends AbstractConnectorView<InputConnector> {
     public InputConnectorView(GraphView graphView, InputConnector connector) {
         super(graphView, connector);
-    }
-
-    @Override
-    protected AbstractConnectorView<InputConnector> createCloneForDragInner(GraphView graphView, Connector connector) {
-        return new InputConnectorView(graphView, (InputConnector) connector);
     }
 
     /**
