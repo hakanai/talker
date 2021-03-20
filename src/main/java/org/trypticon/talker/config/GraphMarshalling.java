@@ -27,15 +27,16 @@ public class GraphMarshalling {
         ImmutableList.Builder<Configuration> nodeConfigurations = ImmutableList.builder();
         int nodeId = 0;
         for (Node node : graph.getNodes()) {
-            nodeConfigurations.add(Configuration.builder()
-                    .put("providerId", node.getProviderId())
-                    .put("x", node.getLocation().x)
-                    .put("y", node.getLocation().y)
-                    .put("config", node.getConfiguration())
-                    .build());
-
             nodeId++;
             idsByNode.put(node, nodeId);
+
+            nodeConfigurations.add(Configuration.builder()
+                    .put("id", nodeId)
+                    .put("providerId", node.getProviderId())
+                    .put("x", node.getX())
+                    .put("y", node.getY())
+                    .put("config", node.getConfiguration())
+                    .build());
         }
 
         ImmutableList.Builder<Configuration> connectionConfigurations = ImmutableList.builder();
@@ -45,6 +46,7 @@ public class GraphMarshalling {
                     .put("fromConnector", connection.getSource().getId())
                     .put("toNode", idsByNode.get(connection.getTarget().getParent()))
                     .put("toConnector", connection.getTarget().getId())
+                    .put("cableLength", connection.getCableLength())
                     .build());
         }
 
