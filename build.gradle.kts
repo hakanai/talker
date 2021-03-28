@@ -13,6 +13,10 @@ java {
     sourceCompatibility = JavaVersion.VERSION_11
 }
 
+tasks.withType<Test> {
+    useJUnitPlatform()
+}
+
 tasks.withType<JavaCompile> {
     // Gradle, why is this not yet the default?!
     options.encoding = "UTF-8"
