@@ -70,13 +70,6 @@ public class TwitchMessagesNode extends Node implements Startable {
             //            .get(0).getProfileImageUrl();
 
             Map<String, String> tags = event.getMessageEvent().getTags();
-
-            System.out.println("======================================");
-            System.out.println("Message:");
-            System.out.println(event.getMessage());
-            System.out.println("Tags:");
-            System.out.println(tags);
-
             String name = tags.get("display-name");
             String message = event.getMessage();
             Text richText;
