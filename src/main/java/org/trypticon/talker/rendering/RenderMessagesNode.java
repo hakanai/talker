@@ -7,6 +7,7 @@ import java.time.format.FormatStyle;
 import java.util.Locale;
 
 import com.google.common.collect.ImmutableList;
+import com.google.common.html.HtmlEscapers;
 import org.trypticon.talker.TalkerView;
 import org.trypticon.talker.config.Configuration;
 import org.trypticon.talker.messages.Message;
@@ -50,23 +51,28 @@ public class RenderMessagesNode extends Node {
         String dateString = dateFormatter.withLocale(locale).format(dateTime);
         String timeString = timeFormatter.withLocale(locale).format(dateTime);
 
-        String dayDivider = String.format(
-                locale,
-                "<table><tr><td><span color=\"808080\">Day changed to %s%n</span></td></tr></table>",
-                dateString);
+        String dayDivider = "<table><tr><td><span color=\"808080\">Day changed to " + dateString +
+                "\n</span></td></tr></table>";
         if (!dayDivider.equals(lastDayDivider)) {
             view.appendMarkup(dayDivider);
             lastDayDivider = dayDivider;
         }
 
-        String messageLine = String.format(
-                locale,
-                "<table><tr valign=\"top\"><td><img width=\"48\" height=\"48\" src=\"%s\"></td>" +
-                        "<td><b>%s</b> <span color=\"#808080\">at %s</span><br>%s</td></tr></table>",
-                message.getSpeakerIcon(),
-                message.getSpeaker(),
-                timeString,
-                message.getText().getHyperTextContent());
-        view.appendMarkup(messageLine);
+        StringBuilder messageLine = new StringBuilder(1024);
+        messageLine.append("<table><tr valign=\"top\">");
+        if (message.getSpeakerIcon() != null) {
+            messageLine.append("<td><img width=\"48\" height=\"48\" src=\"")
+                    .append(HtmlEscapers.htmlEscaper().escape(message.getSpeakerIcon().toExternalForm()))
+                    .append("\"></td>");
+        }
+        messageLine.append("<td><b>")
+                .append(HtmlEscapers.htmlEscaper().escape(message.getSpeaker()))
+                .append("</b> <span color=\"#808080\">at ")
+                .append(timeString)
+                .append("</span><br>")
+                .append(message.getText().getHyperTextContent())
+                .append("</td>")
+                .append("</tr></table>");
+        view.appendMarkup(messageLine.toString());
     }
 }
