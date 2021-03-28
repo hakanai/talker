@@ -26,7 +26,7 @@ public class KuromojiTokenizerNode extends Node {
     @Override
     public void push(InputConnector connector, Object data) {
         Message message = (Message) data;
-        Text text = tokenizer.tokenise(message.getText());
+        Text text = tokenizer.tokenize(message.getText());
         sendOutput(analyzedTextConnector, text);
     }
 }

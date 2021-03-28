@@ -1,9 +1,9 @@
 package org.trypticon.talker.text.tokenisation;
 
-import java.util.LinkedList;
 import java.util.List;
 import java.util.regex.Pattern;
 
+import com.google.common.collect.ImmutableList;
 import org.atilika.kuromoji.Tokenizer;
 import org.trypticon.talker.text.Text;
 import org.trypticon.talker.text.TextToken;
@@ -11,7 +11,7 @@ import org.trypticon.talker.text.Token;
 import org.trypticon.talker.text.TokenType;
 
 /**
- * Tokeniser backed by Kuromoji.
+ * Tokenizer backed by Kuromoji.
  */
 public class KuromojiTokenizer {
     private final Tokenizer tokeniser;
@@ -24,20 +24,38 @@ public class KuromojiTokenizer {
     }
 
     /**
-     * Tokenises text using Kuromoji.
+     * Tokenizes text using Kuromoji.
      *
      * @param text the input text.
      * @return the output text.
      */
-    public Text tokenise(String text) {
+    public Text tokenize(String text) {
         List<org.atilika.kuromoji.Token> tokens = tokeniser.tokenize(text);
-        List<Token> results = new LinkedList<>();
+        ImmutableList.Builder<Token> results = ImmutableList.builder();
 
         for (org.atilika.kuromoji.Token token : tokens) {
             results.add(convertToken(token));
         }
 
-        return new Text(results);
+        return new Text(results.build());
+    }
+
+    /**
+     * Tokenizes text using Kuromoji.
+     *
+     * @param text the input text.
+     * @return the output text.
+     */
+    public Text tokenize(Text text) {
+        ImmutableList.Builder<Token> results = ImmutableList.builder();
+        for (Token token : text) {
+            if (token instanceof TextToken) {
+                results.addAll(tokenize(token.getContent()));
+            } else {
+                results.add(token);
+            }
+        }
+        return new Text(results.build());
     }
 
     private Token convertToken(org.atilika.kuromoji.Token token) {

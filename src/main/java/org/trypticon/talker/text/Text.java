@@ -1,19 +1,23 @@
 package org.trypticon.talker.text;
 
 import java.util.AbstractList;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Locale;
 import java.util.stream.Collectors;
+
+import com.google.common.collect.ImmutableList;
 
 /**
  * Representation of a piece of text.
  */
 public class Text extends AbstractList<Token> {
-    private final List<Token> tokens;
+    private final ImmutableList<Token> tokens;
 
-    public Text(List<Token> tokens) {
-        this.tokens = new ArrayList<>(tokens);
+    public Text(Iterable<Token> tokens) {
+        this.tokens = ImmutableList.copyOf(tokens);
+    }
+
+    public Text(Token... tokens) {
+        this.tokens = ImmutableList.copyOf(tokens);
     }
 
     public String getPlainTextContent() {

@@ -1,12 +1,12 @@
 package org.trypticon.talker.text.tokenisation;
 
+import java.net.URL;
+import java.util.Arrays;
+
 import org.hamcrest.Matcher;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.trypticon.talker.text.Token;
-import org.trypticon.talker.text.TokenType;
-
-import java.util.Arrays;
+import org.trypticon.talker.text.*;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
@@ -24,7 +24,7 @@ public class KuromojiTokenizerTest {
 
     @Test
     public void testEnglish() {
-        assertThat(tokeniser.tokenise("This is a test."), contains(Arrays.asList(
+        assertThat(tokeniser.tokenize("This is a test."), contains(Arrays.asList(
                 token("This", TokenType.OTHER),
                 token(" ", TokenType.WHITESPACE),
                 token("is", TokenType.OTHER),
@@ -37,7 +37,7 @@ public class KuromojiTokenizerTest {
 
     @Test
     public void testJapanese() {
-        assertThat(tokeniser.tokenise("これはテストです。"), contains(Arrays.asList(
+        assertThat(tokeniser.tokenize("これはテストです。"), contains(Arrays.asList(
                 token("これ", TokenType.JAPANESE),
                 token("は", TokenType.JAPANESE),
                 token("テスト", TokenType.JAPANESE),
@@ -47,7 +47,7 @@ public class KuromojiTokenizerTest {
 
     @Test
     public void testJapaneseInEnglish() {
-        assertThat(tokeniser.tokenise("His name is written as 山田太郎."), contains(Arrays.asList(
+        assertThat(tokeniser.tokenize("His name is written as 山田太郎."), contains(Arrays.asList(
                 token("His", TokenType.OTHER),
                 token(" ", TokenType.WHITESPACE),
                 token("name", TokenType.OTHER),
@@ -65,7 +65,7 @@ public class KuromojiTokenizerTest {
 
     @Test
     public void testEnglishInJapanese() {
-        assertThat(tokeniser.tokenise("初音ミクはVOCALOIDである。"), contains(Arrays.asList(
+        assertThat(tokeniser.tokenize("初音ミクはVOCALOIDである。"), contains(Arrays.asList(
                 token("初音", TokenType.JAPANESE),
                 token("ミク", TokenType.JAPANESE),
                 token("は", TokenType.JAPANESE),
@@ -77,16 +77,27 @@ public class KuromojiTokenizerTest {
 
     @Test
     public void testSingleW() {
-        assertThat(tokeniser.tokenise("やめろｗ"), contains(Arrays.asList(
+        assertThat(tokeniser.tokenize("やめろｗ"), contains(Arrays.asList(
                 token("やめろ", TokenType.JAPANESE),
                 token("ｗ", TokenType.OTHER))));
     }
 
     @Test
     public void testMultipleW() {
-        assertThat(tokeniser.tokenise("やめろｗｗｗｗｗｗ"), contains(Arrays.asList(
+        assertThat(tokeniser.tokenize("やめろｗｗｗｗｗｗ"), contains(Arrays.asList(
                 token("やめろ", TokenType.JAPANESE),
                 token("ｗｗｗｗｗｗ", TokenType.OTHER))));
+    }
+
+    @Test
+    public void testRichText() throws Exception {
+        Text richText = new Text(
+                new TextToken("やめろｗｗｗｗｗｗ", TokenType.UNRECOGNISED),
+                new Emoticon(new URL("http://example.com/emoticons/laugh.gif")));
+        assertThat(tokeniser.tokenize(richText), contains(Arrays.asList(
+                token("やめろ", TokenType.JAPANESE),
+                token("ｗｗｗｗｗｗ", TokenType.OTHER),
+                token("\uFFFC", TokenType.EMOTICON))));
     }
 
     private Matcher<Token> token(String text, TokenType type) {
