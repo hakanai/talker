@@ -7,7 +7,7 @@ import org.junit.jupiter.api.Test;
 import org.trypticon.talker.model.Graph;
 import org.trypticon.talker.model.GraphLocation;
 import org.trypticon.talker.text.Text;
-import org.trypticon.talker.text.Token;
+import org.trypticon.talker.text.TextToken;
 import org.trypticon.talker.text.TokenType;
 
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -30,7 +30,7 @@ public class KatatanaReadingSubstituterTest {
     @Test
     public void testAlreadyJapanese() {
         String result = substituter.substitute(new Text(Collections.singletonList(
-                new Token("テスト", TokenType.JAPANESE)))).getContent();
+                new TextToken("テスト", TokenType.JAPANESE)))).getPlainTextContent();
 
         assertThat(result, is("テスト"));
     }
@@ -127,8 +127,8 @@ public class KatatanaReadingSubstituterTest {
 
     private String substitute(String input) {
         Text inputText = new Text(Collections.singletonList(
-                new Token(input, TokenType.OTHER)));
+                new TextToken(input, TokenType.OTHER)));
         Text outputText = substituter.substitute(inputText);
-        return outputText.getContent();
+        return outputText.getPlainTextContent();
     }
 }

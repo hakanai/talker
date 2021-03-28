@@ -26,6 +26,6 @@ public class RoboKoeSpeakerNode extends SpeakerNode {
     @Override
     public void speak(Text text) {
         //TODO: This process exits before it has finished. :(
-        ProcessUtils.execAndWait(executable, text.getContent());
+        ProcessUtils.execAndWait(executable, text.getPlainTextContent());
     }
 }

@@ -1,13 +1,14 @@
 package org.trypticon.talker.text.tokenisation;
 
-import org.atilika.kuromoji.Tokenizer;
-import org.trypticon.talker.text.Text;
-import org.trypticon.talker.text.Token;
-import org.trypticon.talker.text.TokenType;
-
 import java.util.LinkedList;
 import java.util.List;
 import java.util.regex.Pattern;
+
+import org.atilika.kuromoji.Tokenizer;
+import org.trypticon.talker.text.Text;
+import org.trypticon.talker.text.TextToken;
+import org.trypticon.talker.text.Token;
+import org.trypticon.talker.text.TokenType;
 
 /**
  * Tokeniser backed by Kuromoji.
@@ -81,6 +82,6 @@ public class KuromojiTokenizer {
             }
         }
 
-        return new Token(text, tokenType);
+        return new TextToken(text, tokenType);
     }
 }

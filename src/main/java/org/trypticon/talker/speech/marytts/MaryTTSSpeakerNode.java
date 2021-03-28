@@ -32,7 +32,7 @@ public class MaryTTSSpeakerNode extends SpeakerNode {
 
     @Override
     public void speak(Text text) {
-        try (AudioInputStream inputStream = wrapper.generateAudio(text.getContent())) {
+        try (AudioInputStream inputStream = wrapper.generateAudio(text.getPlainTextContent())) {
             AudioPlayer player = new AudioPlayer(inputStream);
             player.start();
             player.join();

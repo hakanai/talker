@@ -10,7 +10,7 @@ import com.ibm.icu.text.Transliterator;
 import org.trypticon.talker.marytts.MaryDuration;
 import org.trypticon.talker.marytts.MaryDurationFactory;
 import org.trypticon.talker.text.Text;
-import org.trypticon.talker.text.Token;
+import org.trypticon.talker.text.TextToken;
 import org.trypticon.talker.text.TokenType;
 
 /**
@@ -231,8 +231,8 @@ class KatakanaGenerator {
      * @return the Katakana reading of the text.
      */
     Text englishToKatakana(Text english) {
-        String romaji = englishToRomaji(english.getContent());
-        return new Text(Collections.singletonList(new Token(
+        String romaji = englishToRomaji(english.getPlainTextContent());
+        return new Text(Collections.singletonList(new TextToken(
                 romajiToKatakana(romaji),
                 TokenType.JAPANESE)));
     }
@@ -257,8 +257,8 @@ class KatakanaGenerator {
      * @return the Japanese equivalent punctuation.
      */
     Text punctuationToJapanese(Text punctuation) {
-        return new Text(Collections.singletonList(new Token(
-                transliterator.transliterate(punctuation.getContent()),
+        return new Text(Collections.singletonList(new TextToken(
+                transliterator.transliterate(punctuation.getPlainTextContent()),
                 TokenType.PUNCTUATION)));
     }
 

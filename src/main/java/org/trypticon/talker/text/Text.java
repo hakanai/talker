@@ -16,7 +16,7 @@ public class Text extends AbstractList<Token> {
         this.tokens = new ArrayList<>(tokens);
     }
 
-    public String getContent() {
+    public String getPlainTextContent() {
         return tokens.stream()
                 .map(Token::getContent)
                 .collect(Collectors.joining());

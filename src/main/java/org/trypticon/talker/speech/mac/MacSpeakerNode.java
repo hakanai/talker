@@ -50,9 +50,9 @@ public class MacSpeakerNode extends SpeakerNode {
     @Override
     public void speak(Text text) {
         if (voice == null) {
-            ProcessUtils.execAndWait("say", text.getContent());
+            ProcessUtils.execAndWait("say", text.getPlainTextContent());
         } else {
-            ProcessUtils.execAndWait("say", "-v", voice, text.getContent());
+            ProcessUtils.execAndWait("say", "-v", voice, text.getPlainTextContent());
         }
     }
 }

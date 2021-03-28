@@ -3,11 +3,17 @@ package org.trypticon.talker.text;
 /**
  * Representation of a single token of text.
  */
-public final class Token {
+public class Token {
     private final String content;
     private final TokenType type;
 
-    public Token(String content, TokenType type) {
+    /**
+     * Package local constructor means that we know about all subclasses.
+     *
+     * @param content
+     * @param type
+     */
+    Token(String content, TokenType type) {
         this.content = content;
         this.type = type;
     }

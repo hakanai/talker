@@ -5,6 +5,7 @@ import java.util.regex.Pattern;
 
 import org.trypticon.talker.config.Configuration;
 import org.trypticon.talker.model.GraphLocation;
+import org.trypticon.talker.text.TextToken;
 import org.trypticon.talker.text.Token;
 import org.trypticon.talker.text.TokenType;
 
@@ -39,7 +40,7 @@ public class RegexSubstituterNode extends TokenByTokenSubstituterNode {
         if (token.getType() == inputType) {
             Matcher matcher = regex.matcher(token.getContent());
             if (matcher.matches()) {
-                return new Token(matcher.replaceFirst(replacement), outputType);
+                return new TextToken(matcher.replaceFirst(replacement), outputType);
             }
         }
         return token;

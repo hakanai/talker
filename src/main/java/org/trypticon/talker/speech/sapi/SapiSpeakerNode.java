@@ -50,7 +50,7 @@ public class SapiSpeakerNode extends SpeakerNode {
         Path tempFile = null;
         try {
             tempFile = Files.createTempFile("speak", ".js");
-            writeScript(tempFile, text.getContent());
+            writeScript(tempFile, text.getPlainTextContent());
             ProcessUtils.execAndWait(executable, "/nologo", tempFile.toString());
         } catch (IOException e) {
             throw new IllegalStateException("Error writing temp files?", e);
