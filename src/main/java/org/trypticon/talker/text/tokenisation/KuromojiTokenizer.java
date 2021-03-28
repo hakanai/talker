@@ -50,7 +50,7 @@ public class KuromojiTokenizer {
         ImmutableList.Builder<Token> results = ImmutableList.builder();
         for (Token token : text) {
             if (token instanceof TextToken) {
-                results.addAll(tokenize(token.getContent()));
+                results.addAll(tokenize(token.getPlainTextContent()));
             } else {
                 results.add(token);
             }

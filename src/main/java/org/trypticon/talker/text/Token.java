@@ -3,7 +3,7 @@ package org.trypticon.talker.text;
 /**
  * Representation of a single token of text.
  */
-public class Token {
+public abstract class Token {
     private final String content;
     private final TokenType type;
 
@@ -18,9 +18,11 @@ public class Token {
         this.type = type;
     }
 
-    public String getContent() {
+    public String getPlainTextContent() {
         return content;
     }
+
+    public abstract String getHyperTextContent();
 
     public TokenType getType() {
         return type;

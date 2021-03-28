@@ -22,7 +22,13 @@ public class Text extends AbstractList<Token> {
 
     public String getPlainTextContent() {
         return tokens.stream()
-                .map(Token::getContent)
+                .map(Token::getPlainTextContent)
+                .collect(Collectors.joining());
+    }
+
+    public String getHyperTextContent() {
+        return tokens.stream()
+                .map(Token::getHyperTextContent)
                 .collect(Collectors.joining());
     }
 

@@ -66,7 +66,7 @@ public class RenderMessagesNode extends Node {
                 message.getSpeakerIcon(),
                 message.getSpeaker(),
                 timeString,
-                message.getText());
+                message.getText().getHyperTextContent());
         view.appendMarkup(messageLine);
     }
 }

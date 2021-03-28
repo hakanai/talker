@@ -38,7 +38,7 @@ public class RegexSubstituterNode extends TokenByTokenSubstituterNode {
     @Override
     protected Token substitute(Token token) {
         if (token.getType() == inputType) {
-            Matcher matcher = regex.matcher(token.getContent());
+            Matcher matcher = regex.matcher(token.getPlainTextContent());
             if (matcher.matches()) {
                 return new TextToken(matcher.replaceFirst(replacement), outputType);
             }
